@@ -4,12 +4,12 @@ import numpy as np
 import math
 
 class Scan:
-    def __init__(self, max_dist=50000, start=(0, 0), dest=(99,99), angle=90, angle_incr=5):
+    def __init__(self, max_dist=50000, start=(0, 0), dest=(99,99), angle=0, angle_incr=5):
         """
         max_dist: maximum distance threshold (eg viewable distance)
         start: starting position on (100, 100) map
         dest: desired end destination on (100, 100) map
-        angle: starting angle relative to map, where
+        angle: starting angle of car with *zeroed channel 0 servo* relative to map
             0 is towards [0, y]
             90 is towards [x, 99]
             180 is towards [99, y]
@@ -38,7 +38,7 @@ class Scan:
 
         angle: angle of reading relative to map
         """
-        sensor_angle = angle + self.angle
+        sensor_angle = angle - self.angle
         if 30 <= sensor_angle <= 150: # restrict angle to +- 60 deg
             # take distance reading
             self.pwm_S.setServoPwm("0", sensor_angle)
