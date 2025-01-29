@@ -61,4 +61,6 @@ class Scan:
                 x = max(0, min(99, self.x + round(dist * math.sin(math.radians(angle)))))
                 y = max(0, min(99, self.y + round(dist * math.cos(math.radians(angle)))))
 
+                print(f"({x}, {y}) <- d={dist}, a = {angle}")
+
                 self.map[x][y] = 1
