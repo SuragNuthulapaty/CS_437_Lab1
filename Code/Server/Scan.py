@@ -82,7 +82,7 @@ class Scan:
                                 self.map[x][i] = 1
                                 j += 1
                         else:
-                            m = (y - j) / min(x - i)
+                            m = (y - j) / (x - i)
 
                             print(f"  interpolating {prev} - {(x, y)}") # debug
 
