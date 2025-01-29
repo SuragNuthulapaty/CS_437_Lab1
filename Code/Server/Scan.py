@@ -30,7 +30,7 @@ class Scan:
         self.x = start[0] # current position is self.map[self.x, self.y], facing self.angle
         self.y = start[1]
 
-        self.pwm_S.setServoPwm("1", -5) # reset servo
+        self.pwm_S.setServoPwm("1", 85) # reset servo
 
     def read(self, angle=90):
         """
