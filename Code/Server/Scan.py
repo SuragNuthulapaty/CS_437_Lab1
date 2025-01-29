@@ -2,6 +2,7 @@ from Ultrasonic import *
 from servo import *
 import numpy as np
 import math
+import matplotlib.pyplot as plt
 
 class Scan:
     def __init__(self, max_dist=50000, start=(0, 0), dest=(99,99), angle=0, angle_incr=5):
@@ -64,3 +65,14 @@ class Scan:
                 print(f"({x}, {y}) <- d={dist}, a = {angle}")
 
                 self.map[x][y] = 1
+
+    def save_map(self, filename="./map.png"):
+        """
+        save the map to a PNG
+
+        filename: save path
+        """
+        plt.imshow(self.map, cmap='gray', interpolation='nearest')
+        plt.axis('off')  # Hide axes
+        plt.savefig(filename, bbox_inches='tight', pad_inches=0)
+        plt.close()
