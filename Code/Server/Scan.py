@@ -30,7 +30,7 @@ class Scan:
         self.x = start[0] # current position is self.map[self.x, self.y], facing self.angle
         self.y = start[1]
 
-        self.pwm_S.setServoPwm("1", 85) # reset servo
+        self.pwm_S.setServoPwm("1", 80) # reset servo
 
     def read(self, angle=90):
         """
@@ -39,7 +39,7 @@ class Scan:
         angle: angle of reading relative to map
         """
         sensor_angle = angle - self.angle
-        if -60 <= sensor_angle <= 60: # restrict angle to +- 60 deg
+        if 30 <= sensor_angle <= 120: # restrict angle to +- 60 deg
             # take distance reading
             self.pwm_S.setServoPwm("0", sensor_angle)
             time.sleep(0.2)
