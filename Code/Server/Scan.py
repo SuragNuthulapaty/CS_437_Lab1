@@ -30,6 +30,8 @@ class Scan:
         self.x = start[0] # current position is self.map[self.x, self.y], facing self.angle
         self.y = start[1]
 
+        self.pwm_S.setServoPwm("1", -5) # reset servo
+
     def read(self, angle=90):
         """
         return the distance in cm, or -1 if car cannot read angle
@@ -37,7 +39,7 @@ class Scan:
         angle: angle of reading relative to map
         """
         sensor_angle = angle - self.angle
-        if 0 <= sensor_angle <= 180:
+        if -60 <= sensor_angle <= 60: # restrict angle to +- 60 deg
             # take distance reading
             self.pwm_S.setServoPwm("0", sensor_angle)
             time.sleep(0.2)
@@ -50,7 +52,7 @@ class Scan:
         """
         perform a 180 degree scan at the current position, and update the map accordingly
 
-        todo interpolate readings
+        todo interpolate readings, add clearance
         """
         for angle in range(0, 360, self.angle_incr):
             dist = self.read(angle)
