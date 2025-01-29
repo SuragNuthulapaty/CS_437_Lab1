@@ -4,8 +4,14 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 
+"""
+cd CS_437_Lab1/Code/Server
+git pull
+python -i Scan.py
+"""
+
 class Scan:
-    def __init__(self, max_dist=200, start=(0, 0), dest=(99,99), angle=0, angle_incr=5, map_size=(100,100)):
+    def __init__(self, max_dist=200, start=(0, 50), dest=(99,99), angle=0, angle_incr=5, map_size=(100,100)):
         """
         max_dist: maximum distance threshold (eg viewable distance)
         start: starting position on (100, 100) map
@@ -49,6 +55,14 @@ class Scan:
 
         # angle is out of bounds
         return -1
+
+    def run(self):
+        self.reset_map()
+        self.update_map()
+        self.save_map()
+
+    def reset_map(self):
+        self.map = np.zeros_like(self.map)
 
     def update_map(self):
         """
