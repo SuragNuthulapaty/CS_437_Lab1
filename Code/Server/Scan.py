@@ -73,15 +73,24 @@ class Scan:
                     if prev != None:
                         # interpolate with previous reading
                         i, j = prev
-                        m = (y - j) / (x - i)
+                        curr = x, y # temporarily store x, y
+                        i, x, y, j = min(y, j), max(y, j) # set i < x, j < y
 
-                        print(f"  interpolating {prev} - {(x, y)}") # debug
+                        if (x == i):
+                            # special case to handle dividing by 0
+                            while j < y:
+                                self.map[x][i] = 1
+                                j += 1
+                        else:
+                            m = (y - j) / min(x - i)
 
-                        while i < x:
-                            print(f"    {i, j}")
-                            self.map[round(i)][round(j)] = 1
-                            i += 1
-                            j += m
+                            print(f"  interpolating {prev} - {(x, y)}") # debug
+
+                            while i < x:
+                                print(f"    {i, j}")
+                                self.map[round(i)][round(j)] = 1
+                                i += 1
+                                j += m
 
                     prev = (x, y)
             else:
