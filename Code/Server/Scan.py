@@ -74,7 +74,7 @@ class Scan:
                         # interpolate with previous reading
                         i, j = prev
                         curr = x, y # temporarily store x, y
-                        i, x, y, j = min(y, j), max(y, j) # set i < x, j < y
+                        i, x, y, j = min(x, i), max(x, i), min(y, j), max(y, j) # set i < x, j < y
 
                         if (x == i):
                             # special case to handle dividing by 0
@@ -91,6 +91,8 @@ class Scan:
                                 self.map[round(i)][round(j)] = 1
                                 i += 1
                                 j += m
+
+                        x, y = curr
 
                     prev = (x, y)
             else:
