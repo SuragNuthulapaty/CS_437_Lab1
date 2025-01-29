@@ -58,7 +58,7 @@ class Scan:
             dist = self.read(angle)
             if 0 < dist < self.max_dist:
                 # add obstacle to map
-                x = min(0, max(99, self.x + round(dist * math.sin(math.radians(angle)))))
-                y = min(0, max(99, self.y + round(dist * math.cos(math.radians(angle)))))
+                x = max(0, min(99, self.x + round(dist * math.sin(math.radians(angle)))))
+                y = max(0, min(99, self.y + round(dist * math.cos(math.radians(angle)))))
 
                 self.map[x][y] = 1
