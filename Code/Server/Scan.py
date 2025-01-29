@@ -61,8 +61,8 @@ class Scan:
             dist = self.read(angle)
             if 0 < dist < self.max_dist:
                 # calculate distance
-                x = self.x + round(dist * math.sin(math.radians(angle)))))
-                y = self.y + round(dist * math.cos(math.radians(angle)))))
+                x = self.x + round(dist * math.sin(math.radians(angle)))
+                y = self.y + round(dist * math.cos(math.radians(angle)))
 
                 # add to map
                 if 0 <= x <= self.map.shape[0] and 0 <= y <= self.map.shape[1]:
