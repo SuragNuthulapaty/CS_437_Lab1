@@ -5,7 +5,7 @@ import math
 import matplotlib.pyplot as plt
 
 class Scan:
-    def __init__(self, max_dist=50000, start=(0, 0), dest=(99,99), angle=0, angle_incr=5, map_size=(100,100):
+    def __init__(self, max_dist=200, start=(0, 0), dest=(99,99), angle=0, angle_incr=5, map_size=(100,100)):
         """
         max_dist: maximum distance threshold (eg viewable distance)
         start: starting position on (100, 100) map
@@ -54,19 +54,38 @@ class Scan:
         """
         perform a 180 degree scan at the current position, and update the map accordingly
 
-        todo interpolate readings, add clearance
+        todo add clearance for A*, optionally reset values to 0 on update
         """
+        prev = None # distance reading at previous angle
         for angle in range(0, 360, self.angle_incr):
             dist = self.read(angle)
             if 0 < dist < self.max_dist:
-                # add obstacle to map
+                # calculate distance
                 x = self.x + round(dist * math.sin(math.radians(angle)))))
                 y = self.y + round(dist * math.cos(math.radians(angle)))))
 
-                print(f"({x}, {y}) <- d={dist}, a = {angle}")
-
+                # add to map
                 if 0 <= x <= self.map.shape[0] and 0 <= y <= self.map.shape[1]:
                     self.map[x][y] = 1
+
+                    print(f"({x}, {y}) <- d={dist}, a={angle}") # debug
+
+                    if prev != None:
+                        # interpolate with previous reading
+                        i, j = prev
+                        m = (y - j) / (x - i)
+
+                        print(f"  interpolating {prev} - {(x, y)}") # debug
+
+                        while i < x:
+                            print(f"    {i, j}")
+                            self.map[round(i)][round(j)] = 1
+                            i += 1
+                            j += m
+
+                    prev = (x, y)
+            else:
+                prev = None
 
     def save_map(self, filename="./map.png"):
         """
