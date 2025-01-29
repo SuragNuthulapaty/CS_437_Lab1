@@ -4,7 +4,7 @@ import numpy as np
 import math
 
 class Scan:
-    def __init__(self, max_dist=50, start=(0, 0), dest=(99,99), angle=90, angle_incr=5):
+    def __init__(self, max_dist=50000, start=(0, 0), dest=(99,99), angle=90, angle_incr=5):
         """
         max_dist: maximum distance threshold (eg viewable distance)
         start: starting position on (100, 100) map
@@ -38,7 +38,7 @@ class Scan:
 
         angle: angle of reading relative to map
         """
-        sensor_angle = angle - self.angle
+        sensor_angle = angle + self.angle
         if 30 <= sensor_angle <= 150: # restrict angle to +- 60 deg
             # take distance reading
             self.pwm_S.setServoPwm("0", sensor_angle)
