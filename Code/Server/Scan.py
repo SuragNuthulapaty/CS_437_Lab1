@@ -5,7 +5,7 @@ import math
 import matplotlib.pyplot as plt
 
 class Scan:
-    def __init__(self, max_dist=50000, start=(0, 0), dest=(99,99), angle=0, angle_incr=5):
+    def __init__(self, max_dist=50000, start=(0, 0), dest=(99,99), angle=0, angle_incr=5, map_size=(100,100):
         """
         max_dist: maximum distance threshold (eg viewable distance)
         start: starting position on (100, 100) map
@@ -16,6 +16,7 @@ class Scan:
             180 is towards [99, y]
             270 is towards [x, 0]
         angle_incr: angle increments at which to scan
+        map_size: size of array representing map
         """
 
         self.ultrasonic = Ultrasonic() # sensor
@@ -27,7 +28,7 @@ class Scan:
         self.dest = dest
         self.angle_incr = angle_incr
 
-        self.map = np.zeros((100, 100)) # map of obstacles, where 0 represents an emtpy space
+        self.map = np.zeros(map_size) # map of obstacles, where 0 represents an emtpy space
         self.x = start[0] # current position is self.map[self.x, self.y], facing self.angle
         self.y = start[1]
 
@@ -59,12 +60,13 @@ class Scan:
             dist = self.read(angle)
             if 0 < dist < self.max_dist:
                 # add obstacle to map
-                x = max(0, min(99, self.x + round(dist * math.sin(math.radians(angle)))))
-                y = max(0, min(99, self.y + round(dist * math.cos(math.radians(angle)))))
+                x = self.x + round(dist * math.sin(math.radians(angle)))))
+                y = self.y + round(dist * math.cos(math.radians(angle)))))
 
                 print(f"({x}, {y}) <- d={dist}, a = {angle}")
 
-                self.map[x][y] = 1
+                if 0 <= x <= self.map.shape[0] and 0 <= y <= self.map.shape[1]:
+                    self.map[x][y] = 1
 
     def save_map(self, filename="./map.png"):
         """
@@ -72,7 +74,9 @@ class Scan:
 
         filename: save path
         """
+        self.map[self.x][self.y] = 0.5 # car location
         plt.imshow(self.map, cmap='gray', interpolation='nearest')
         plt.axis('off')  # Hide axes
         plt.savefig(filename, bbox_inches='tight', pad_inches=0)
         plt.close()
+        self.map[self.x][self.y] = 0 # reset car indicator
