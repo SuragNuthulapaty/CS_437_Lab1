@@ -41,7 +41,7 @@ class Scan:
 
         self.pwm_S.setServoPwm("1", 80) # reset servo
 
-        self.padding = np.ones((21, 21)) # shape of added clearance
+        self.padding = np.ones((11, 11)) # shape of added clearance
 
     def read(self, angle=90):
         """
