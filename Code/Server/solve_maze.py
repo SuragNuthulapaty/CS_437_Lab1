@@ -14,6 +14,14 @@ class DIR(enum.Enum):
 
 # https://www.geeksforgeeks.org/a-search-algorithm-in-python/
 
+"""
+This code was nearly entirely pulled from the above link which was a resource we used 
+in order to learn how A* works, and how to implement it specifically
+
+The big changes we made was the back tracking approach. We created the DIR class
+and developed 
+"""
+
 class Cell:
     def __init__(self):
         self.parent_i = 0

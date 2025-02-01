@@ -824,7 +824,8 @@ class mywindow(QMainWindow, Ui_Client):
                 Massage = oneCmd.split("#")
                 if cmd.CMD_SONIC in Massage:
                     # self.Ultrasonic.setText('Obstruction:%s cm' % Massage[1])
-                    u = 'Obstruction:%s cm' % Massage[1]
+                    u = 'Obstruction:%s cm' % Massage[2]
+                    print(Massage)
                     self.U.send(u)
                 elif cmd.CMD_LIGHT in Massage:
                     # self.Light.setText("Left:" + Massage[1] + 'V' + ' ' + "Right:" + Massage[2] + 'V')
