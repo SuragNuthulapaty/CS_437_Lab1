@@ -3,7 +3,7 @@ from servo import *
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-from scipy.ndimage import binary_dilation, generate_binary_structure
+from scipy.ndimage import binary_dilation
 
 """
 cd CS_437_Lab1/Code/Server
@@ -41,7 +41,7 @@ class Scan:
 
         self.pwm_S.setServoPwm("1", 80) # reset servo
 
-        self.padding = generate_binary_structure(15, 15) # shape of added clearance
+        self.padding = np.ones(21, 21) # shape of added clearance
 
     def read(self, angle=90):
         """
