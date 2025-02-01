@@ -99,3 +99,8 @@ class Scan:
         plt.savefig(filename, bbox_inches='tight', pad_inches=0)
         plt.close()
         self.map[self.x][self.y] = 0 # reset car indicator
+
+    def run(self):
+        self.map = np.zeros_like(self.map)
+        self.update_map()
+        self.save_map()
