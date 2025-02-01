@@ -3,6 +3,7 @@ from servo import *
 import numpy as np
 import math
 import matplotlib.pyplot as plt
+from scipy.ndimage import binary_dilation, generate_binary_structure
 
 """
 cd CS_437_Lab1/Code/Server
@@ -40,6 +41,8 @@ class Scan:
 
         self.pwm_S.setServoPwm("1", 80) # reset servo
 
+        self.padding = generate_binary_structure(2, 2) # shape of added clearance
+
     def read(self, angle=90):
         """
         return the distance in cm, or -1 if car cannot read angle
@@ -59,6 +62,7 @@ class Scan:
     def run(self):
         self.reset_map()
         self.update_map()
+        self.map = self.padded_map()
         self.save_map()
 
     def reset_map(self):
@@ -110,6 +114,12 @@ class Scan:
                     x0, y0 = x, y
             else:
                 x0, y0 = None, None
+
+    def padded_map(self):
+        """
+        returns the map with added clearance
+        """
+        return ndimage.binary_dilation(self.map, structure=self.clearance).astype(a.dtype)
 
     def save_map(self, filename="./map.png"):
         """
