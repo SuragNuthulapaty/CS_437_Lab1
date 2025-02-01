@@ -81,7 +81,7 @@ class Scan:
 
                 # add to map
                 if 0 <= x <= self.map.shape[0] and 0 <= y <= self.map.shape[1]:
-                    self.map[y][x] = 1
+                    self.map[x][y] = 1
 
                     print(f"({x}, {y}) <- d={dist}, a={angle}") # debug
 
@@ -101,7 +101,7 @@ class Scan:
 
                             while x0 < x:
                                 print(f"    {x0, y0}")
-                                self.map[round(y0)][round(x0)] = 1
+                                self.map[round(x0)][round(y0)] = 1
                                 x0 += 1
                                 y0 += m
 
