@@ -70,7 +70,7 @@ class Scan:
 
         todo add clearance for A*, optionally reset values to 0 on update
         """
-        prev = None # distance reading at previous angle
+        x0, y0 = None, None # coordinates at previous angle
         for angle in range(0, 360, self.angle_incr):
             dist = self.read(angle)
             if 0 < dist < self.max_dist:
@@ -84,33 +84,31 @@ class Scan:
 
                     print(f"({x}, {y}) <- d={dist}, a={angle}") # debug
 
-                    if prev != None:
+                    if x0 and y0 and ((x - x0) ** 2 + (y - y0) ** 2) < 100:
                         # interpolate with previous reading
-                        i, j = prev
                         curr = x, y # temporarily store x, y
-                        i, x, j, y = min(x, i), max(x, i), min(y, j), max(y, j) # set i < x, j < y
+                        x0, x, y0, y = min(x, x0), max(x, x0), min(y, y0), max(y, y0) # set x0 < x, y0 < y
+                        print(f"  interpolating {(x0, y0)} -> {(x, y)}") # debug
 
-                        if (x == i):
+                        if (x == x0):
                             # special case to handle dividing by 0
-                            while j < y:
-                                self.map[x][i] = 1
-                                j += 1
+                            while y0 < y:
+                                self.map[x][x0] = 1
+                                y0 += 1
                         else:
-                            m = (y - j) / (x - i)
+                            m = (y - y0) / (x - x0)
 
-                            print(f"  interpolating {prev} - {(x, y)}") # debug
-
-                            while i < x:
-                                print(f"    {i, j}")
-                                self.map[round(i)][round(j)] = 1
-                                i += 1
-                                j += m
+                            while x0 < x:
+                                print(f"    {x0, y0}")
+                                self.map[round(x0)][round(y0)] = 1
+                                x0 += 1
+                                y0 += m
 
                         x, y = curr
 
-                    prev = (x, y)
+                    x0, y0 = x, y
             else:
-                prev = None
+                x0, y0 = None, None
 
     def save_map(self, filename="./map.png"):
         """
