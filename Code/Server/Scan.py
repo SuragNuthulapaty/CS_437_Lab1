@@ -44,7 +44,7 @@ class Scan:
         if 30 <= sensor_angle <= 150: # restrict angle to +- 60 deg
             # take distance reading
             self.pwm_S.setServoPwm("0", sensor_angle)
-            time.sleep(0.2)
+            time.sleep(0.4)
             return self.ultrasonic.get_distance()
 
         # angle is out of bounds
@@ -101,6 +101,8 @@ class Scan:
         self.map[self.x][self.y] = 0 # reset car indicator
 
     def run(self):
+        self.x = 0
+        self.y = 50
         self.map = np.zeros_like(self.map)
         self.update_map()
         self.save_map()
