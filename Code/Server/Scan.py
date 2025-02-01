@@ -62,8 +62,9 @@ class Scan:
     def run(self):
         self.reset_map()
         self.update_map()
-        self.map = self.padded_map()
         self.save_map()
+        self.map = self.padded_map()
+        self.save_map("padded_map.png")
 
     def reset_map(self):
         self.map = np.zeros_like(self.map)
