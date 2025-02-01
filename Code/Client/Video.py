@@ -12,7 +12,9 @@ from Command import COMMAND as cmd
 
 class VideoStreaming:
     def __init__(self):
-        self.face_cascade = cv2.CascadeClassifier(r'haarcascade_frontalface_default.xml')
+        # self.face_cascade = cv2.CascadeClassifier(r'haarcascade_frontalface_default.xml')
+        
+        self.face_cascade = cv2.CascadeClassifier(r'stop_sign_classifier_2.xml')
         self.video_Flag=True
         self.connect_Flag=False
         self.face_x=0

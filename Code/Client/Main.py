@@ -602,7 +602,7 @@ class mywindow(QMainWindow, Ui_Client):
 
     def on_btn_Buzzer(self):
         if self.Btn_Buzzer.text() == 'Buzzer':
-            self.TCP.sendData(cmd.CMD_BUZZER + self.intervalChar + '1' + self.endChar)
+            self.TCP.sendData(cmd.CMD_BUZZER + self.intervalChar + '0' + self.endChar)
             self.Btn_Buzzer.setText('Noise')
         else:
             self.TCP.sendData(cmd.CMD_BUZZER + self.intervalChar + '0' + self.endChar)
