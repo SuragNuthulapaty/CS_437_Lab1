@@ -69,6 +69,7 @@ class Scan:
         perform a 180 degree scan at the current position, and update the map accordingly
 
         todo add clearance for A*, optionally reset values to 0 on update
+        note that interpolation may have some small gaps due to rounding
         """
         x0, y0 = None, None # coordinates at previous angle
         for angle in range(0, 360, self.angle_incr):
@@ -80,7 +81,7 @@ class Scan:
 
                 # add to map
                 if 0 <= x <= self.map.shape[0] and 0 <= y <= self.map.shape[1]:
-                    self.map[x][y] = 1
+                    self.map[y][x] = 1
 
                     print(f"({x}, {y}) <- d={dist}, a={angle}") # debug
 
@@ -100,7 +101,7 @@ class Scan:
 
                             while x0 < x:
                                 print(f"    {x0, y0}")
-                                self.map[round(x0)][round(y0)] = 1
+                                self.map[round(y0)][round(x0)] = 1
                                 x0 += 1
                                 y0 += m
 
