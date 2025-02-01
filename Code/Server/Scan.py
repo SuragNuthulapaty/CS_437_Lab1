@@ -70,7 +70,7 @@ class Scan:
 
                     print(f"({x}, {y}) <- d={dist}, a={angle}") # debug
 
-                    if prev != None and (prev[0] != x) # skip vertical lines, which cause div by 0 err for now:
+                    if prev != None and (prev[0] != x): # skip vertical lines, which cause div by 0 err for now:
                         # interpolate with previous reading
                         i, j = prev
                         m = (y - j) / (x - i)
