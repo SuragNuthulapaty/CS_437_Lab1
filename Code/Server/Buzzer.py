@@ -5,7 +5,7 @@ buzzer = Buzzer(17)
 class Buzzer:
     def run(self,command):
         if command!="0":
-            buzzer.on()
+            buzzer.off()
         else:
             buzzer.off()
 if __name__=='__main__':
