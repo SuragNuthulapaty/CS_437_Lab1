@@ -88,7 +88,7 @@ class Scan:
                         # interpolate with previous reading
                         i, j = prev
                         curr = x, y # temporarily store x, y
-                        i, x, y, j = min(x, i), max(x, i), min(y, j), max(y, j) # set i < x, j < y
+                        i, x, j, y = min(x, i), max(x, i), min(y, j), max(y, j) # set i < x, j < y
 
                         if (x == i):
                             # special case to handle dividing by 0
