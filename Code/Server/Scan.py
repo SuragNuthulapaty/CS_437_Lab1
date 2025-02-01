@@ -11,7 +11,7 @@ python -i Scan.py
 """
 
 class Scan:
-    def __init__(self, max_dist=200, start=(0, 50), dest=(99,99), angle=0, angle_incr=5, map_size=(100,100)):
+    def __init__(self, max_dist=50, start=(0, 50), dest=(99,99), angle=0, angle_incr=5, map_size=(100,100)):
         """
         max_dist: maximum distance threshold (eg viewable distance)
         start: starting position on (100, 100) map
