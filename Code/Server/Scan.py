@@ -3,7 +3,7 @@ from servo import *
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-from scipy.ndimage import binary_dilation
+from scipy.ndimage import binary_dilation, convolve
 
 """
 cd CS_437_Lab1/Code/Server
@@ -42,6 +42,7 @@ class Scan:
         self.pwm_S.setServoPwm("1", 80) # reset servo
 
         self.padding = np.ones((11, 11)) # shape of added clearance
+        self.filter = np.ones((3, 3)) # shape of de-noising convolution kernel
 
     def read(self, angle=90):
         """
@@ -63,6 +64,8 @@ class Scan:
         self.reset_map()
         self.update_map()
         self.save_map()
+        self.denoise_map()
+        self.save_map("denoised_map.png")
         self.map = self.padded_map()
         self.save_map("padded_map.png")
 
@@ -73,7 +76,6 @@ class Scan:
         """
         perform a 180 degree scan at the current position, and update the map accordingly
 
-        todo add clearance for A*, optionally reset values to 0 on update
         note that interpolation may have some small gaps due to rounding
         """
         x0, y0 = None, None # coordinates at previous angle
@@ -115,6 +117,10 @@ class Scan:
                     x0, y0 = x, y
             else:
                 x0, y0 = None, None
+
+    def denoise_map(self):
+        num_neighbors = convolve(self.map, self.filter, mode='constant', cval=0)
+        self.map = np.where(num_neighbors > 1, self.map, 0)
 
     def padded_map(self):
         """
