@@ -347,7 +347,7 @@ class Server:
             ADC_Ultrasonic=self.ultrasonic.get_distance()
             #print('distanse: '+str(ADC_Ultrasonic))
             try:
-                self.send(cmd.CMD_MODE+"#"+"3"+"#"+str(ADC_Ultrasonic)+'\n')
+                self.send(cmd.CMD_SONIC+"#"+"3"+"#"+str(ADC_Ultrasonic)+'\n')
             except:
                 self.sonic=False
             self.ultrasonicTimer = threading.Timer(0.23,self.sendUltrasonic)
