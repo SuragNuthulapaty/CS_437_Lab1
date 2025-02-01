@@ -119,7 +119,7 @@ class Scan:
         """
         returns the map with added clearance
         """
-        return ndimage.binary_dilation(self.map, structure=self.clearance).astype(a.dtype)
+        return binary_dilation(self.map, structure=self.padding).astype(self.map.dtype)
 
     def save_map(self, filename="./map.png"):
         """
