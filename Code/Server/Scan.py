@@ -12,7 +12,7 @@ python -i Scan.py
 """
 
 class Scan:
-    def __init__(self, max_dist=50, start=(0, 50), dest=(99,99), angle=0, angle_incr=5, map_size=(100,100)):
+    def __init__(self, max_dist=50, start=(0, 50), dest=(99,99), angle=0, angle_incr=5, map_size=(200,200)):
         """
         max_dist: maximum distance threshold (eg viewable distance)
         start: starting position on (100, 100) map
@@ -41,7 +41,7 @@ class Scan:
 
         self.pwm_S.setServoPwm("1", 80) # reset servo
 
-        self.padding = generate_binary_structure(2, 2) # shape of added clearance
+        self.padding = generate_binary_structure(15, 15) # shape of added clearance
 
     def read(self, angle=90):
         """
