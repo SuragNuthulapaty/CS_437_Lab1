@@ -118,8 +118,10 @@ class Scan:
         filename: save path
         """
         self.map[self.x][self.y] = 0.5 # car location
+        np.rot90(self.map, 2)
         plt.imshow(self.map, cmap='gray', interpolation='nearest')
         plt.axis('off')  # Hide axes
         plt.savefig(filename, bbox_inches='tight', pad_inches=0)
         plt.close()
+        np.rot90(self.map, 2)
         self.map[self.x][self.y] = 0 # reset car indicator
