@@ -4,14 +4,8 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 
-"""
-cd CS_437_Lab1/Code/Server
-git pull
-python -i Scan.py
-"""
-
 class Scan:
-    def __init__(self, max_dist=200, start=(0, 50), dest=(99,99), angle=0, angle_incr=5, map_size=(100,100)):
+    def __init__(self, max_dist=200, start=(0, 0), dest=(99,99), angle=0, angle_incr=5, map_size=(100,100)):
         """
         max_dist: maximum distance threshold (eg viewable distance)
         start: starting position on (100, 100) map
@@ -56,21 +50,13 @@ class Scan:
         # angle is out of bounds
         return -1
 
-    def run(self):
-        self.reset_map()
-        self.update_map()
-        self.save_map()
-
-    def reset_map(self):
-        self.map = np.zeros_like(self.map)
-
     def update_map(self):
         """
         perform a 180 degree scan at the current position, and update the map accordingly
 
         todo add clearance for A*, optionally reset values to 0 on update
         """
-        x0, y0 = None, None # coordinates at previous angle
+        prev = None # distance reading at previous angle
         for angle in range(0, 360, self.angle_incr):
             dist = self.read(angle)
             if 0 < dist < self.max_dist:
@@ -84,31 +70,22 @@ class Scan:
 
                     print(f"({x}, {y}) <- d={dist}, a={angle}") # debug
 
-                    if x0 and y0 and ((x - x0) ** 2 + (y - y0) ** 2) < 100:
+                    if prev != None and (prev[0] != x) # skip vertical lines, which cause div by 0 err for now:
                         # interpolate with previous reading
-                        curr = x, y # temporarily store x, y
-                        x0, x, y0, y = min(x, x0), max(x, x0), min(y, y0), max(y, y0) # set x0 < x, y0 < y
-                        print(f"  interpolating {(x0, y0)} -> {(x, y)}") # debug
+                        i, j = prev
+                        m = (y - j) / (x - i)
 
-                        if (x == x0):
-                            # special case to handle dividing by 0
-                            while y0 < y:
-                                self.map[x][x0] = 1
-                                y0 += 1
-                        else:
-                            m = (y - y0) / (x - x0)
+                        print(f"  interpolating {prev} - {(x, y)}") # debug
 
-                            while x0 < x:
-                                print(f"    {x0, y0}")
-                                self.map[round(x0)][round(y0)] = 1
-                                x0 += 1
-                                y0 += m
+                        while i < x:
+                            print(f"    {i, j}")
+                            self.map[round(i)][round(j)] = 1
+                            i += 1
+                            j += m
 
-                        x, y = curr
-
-                    x0, y0 = x, y
+                    prev = (x, y)
             else:
-                x0, y0 = None, None
+                prev = None
 
     def save_map(self, filename="./map.png"):
         """
