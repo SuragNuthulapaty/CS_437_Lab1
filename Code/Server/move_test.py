@@ -13,4 +13,4 @@ while True:
     elif d == 'r':
         m.right(int(amt))
     elif d == 'l':
-        m.left(int amt)
+        m.left(int(amt))
