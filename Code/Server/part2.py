@@ -1,7 +1,7 @@
 import move as mov
 import servo as serv
 import Buzzer
-import camera
+# import camera
 import solve_maze
 import sys
 from gpiozero import DistanceSensor
@@ -27,14 +27,14 @@ ultrosinic_sensor = DistanceSensor(echo=echo_pin, trigger=trigger_pin ,max_dista
 #     print(f"Usage: python {sys.argv[0]} <start x> <start y> <end x> <end y>")
 #     exit(-1)
 
-goal_x = int(sys.argv[3])
-goal_y = int(sys.argv[4])
+# goal_x = int(sys.argv[3])
+# goal_y = int(sys.argv[4])
 
-cur_x = int(sys.argv[1])
-cur_y = int(sys.argv[2])
+# cur_x = int(sys.argv[1])
+# cur_y = int(sys.argv[2])
 cur_angle = 90
 
-grid = np.zeros(200, 200)
+grid = np.zeros((200, 200))
 
 if len(sys.argv) != 2:
     exit(-1)
@@ -69,11 +69,16 @@ for cur_move, cur_vals in zip(mv, val):
     """
 
     for angle in SERVO_ANGLES:
+        print(angle)
         servo.setServoPwm('0', angle)
         cur_dist = ultrosinic_sensor.distance
+        time.sleep(0.2)
+    
+
+    servo.setServoPwm('0', 90)  
 
         # update the map with Emma's code
-
+    print("doing")
     for cm, cv in zip(cur_move, cur_vals):
         if cv is not None:
             cm(cv)
