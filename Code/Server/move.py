@@ -14,14 +14,14 @@ class Move:
     def __init__(self):        
         self.PWM = Motor()
     
-    def back(self):
+    def back(self, dist = 1):
         self.PWM.setMotorModel(-FORWARD_BACKWARD_SPEED,-FORWARD_BACKWARD_SPEED,-FORWARD_BACKWARD_SPEED,-FORWARD_BACKWARD_SPEED)
-        time.sleep(SLEEP_TIME * 7)
+        time.sleep(SLEEP_TIME * 7 * dist)
         self.stop()
     
-    def forward(self):
+    def forward(self, dist = 1):
         self.PWM.setMotorModel(FORWARD_BACKWARD_SPEED,FORWARD_BACKWARD_SPEED,FORWARD_BACKWARD_SPEED,FORWARD_BACKWARD_SPEED)
-        time.sleep(SLEEP_TIME * 7)
+        time.sleep(SLEEP_TIME * 7 * dist)
         self.stop()
     
     def right(self, deg = 90):
