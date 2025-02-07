@@ -8,6 +8,7 @@ from gpiozero import DistanceSensor
 import numpy as np
 import Led
 import time
+from collections.abc import Iterable
 
 GOOD_THRESHOLD = 5
 
@@ -81,7 +82,10 @@ for cur_move, cur_vals in zip(mv, val):
     print("doing")
     for cm, cv in zip(cur_move, cur_vals):
         if cv is not None:
-            cm(cv)
+            if isinstance(cv, Iterable):
+                cm(*cv)
+            else:
+                cm(cv)
         else:
             cm()
     
