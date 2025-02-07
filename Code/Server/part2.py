@@ -44,7 +44,7 @@ move_1 = [[move.forward, move.right], [move.forward, move.left], [move.forward, 
 val_1 = [[None, 90], [2, 90], [None, 90], [2, 90], [None]]
 
 move_2 = [[move.left, move.forward],[ move.back, move.right], [move.forward, move.left], [move.forward, leds.ledIndex, time.sleep, leds.ledMode, move.forward], [move.left, move.forward]]
-val_2 = [[120, 1.5],[ 1.5, 120], [2, 120], [2, (255, 255, 255, 255), 2, 0, 2], [120, 2]]
+val_2 = [[120, 1.5],[1.5, 120], [2.5, 120], [2, (255, 255, 255, 255), 2, 0, 2], [90, 2]]
 
 
 if sys.argv[1] == '1':
