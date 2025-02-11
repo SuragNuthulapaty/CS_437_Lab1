@@ -9,6 +9,7 @@ class Servo:
     def setServoPwm(self,channel,angle,error=10):
         angle=int(angle)
         if channel=='0':
+            angle += 10
             self.PwmServo.setServoPulse(8,2500-int((angle+error)/0.09))
         elif channel=='1':
             self.PwmServo.setServoPulse(9,500+int((angle+error)/0.09))
@@ -27,7 +28,7 @@ class Servo:
 
 # Main program logic follows:
 if __name__ == '__main__':
-    print("Now servos will rotate to 90°.") 
+    print("Now servos will rotate to 90°.")
     print("If they have already been at 90°, nothing will be observed.")
     print("Please keep the program running when installing the servos.")
     print("After that, you can press ctrl-C to end the program.")
@@ -40,11 +41,11 @@ if __name__ == '__main__':
             print ("\nEnd of program")
             break
 
-    
-
-    
-       
 
 
 
-    
+
+
+
+
+
