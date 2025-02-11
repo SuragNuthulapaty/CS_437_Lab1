@@ -49,7 +49,7 @@ class Scan:
         self.padding = np.ones(padding) # shape of added clearance
         self.filter = np.ones(filter) # shape of de-noising convolution kernel
 
-        self.map = np.zeros(map_size) # map of obstacles, where 0 represents an emtpy space
+        self.map = np.zeros(map_size) # map of obstacles, where 0 represents an empty space
         self.x = start[0] # current position is self.map[self.x, self.y], facing self.angle
         self.y = start[1]
 
