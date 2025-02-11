@@ -62,7 +62,7 @@ def is_valid(src):
 
 def is_unblocked(grid, src):
     row, col = src
-    return grid[row][col] == 1
+    return grid[row][col] == 0
 
 def is_destination(src, dest):
     row, col = src

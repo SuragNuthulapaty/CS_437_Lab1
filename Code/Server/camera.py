@@ -10,21 +10,20 @@ from picamera2 import Picamera2
 import numpy as np
 import utils
 import Led
+import shared
 
+"""
+This code was taking from the following repository, as described in the directions
+https://github.com/tensorflow/examples/tree/master/lite/examples/object_detection/raspberry_pi
 
+We updated the code to work properly on the Pi, based on feedback from campuswire
+
+We then updated the code to look for the "stop sign" attribute, and raise a flag when it sees one of them
+
+When we transitioned into doing this code multithreaded, we changed to using a shared
+thereading event to allow the flag to persist between files
+"""
 def run(model: str, width: int, height: int, num_threads: int, enable_edgetpu: bool) -> None:
-    """Continuously run inference on images acquired from the PiCamera2.
-
-    Args:
-        model: Name of the TFLite object detection model.
-        width: The width of the frame captured from the camera.
-        height: The height of the frame captured from the camera.
-        num_threads: The number of CPU threads to run the model.
-        enable_edgetpu: True/False whether the model is an EdgeTPU model.
-    """
-
-    leds = Led.Led()
-
     in_time = 0
 
     counter, fps = 0, 0
@@ -67,28 +66,31 @@ def run(model: str, width: int, height: int, num_threads: int, enable_edgetpu: b
         for detection in detection_result.detections:
           label = detection.categories[0].category_name 
           score = detection.categories[0].score
+          bounding_box = detection.bounding_box
 
-          if label == "stop sign" and time.time() - in_time > 5:
+          if label == "stop sign" and time.time() - in_time > 5 and score > 0.8:
             in_time = time.time()
-            leds.ledIndex(255, 255, 255, 255)
-            time.sleep(2)
-            leds.ledMode('0')
+
+            box_width_px = bounding_box.width
+
+            if box_width_px > 300:
+                shared.should_stop.set()
 
         image = utils.visualize(image, detection_result)
 
-        # Calculate FPS
-        if counter % fps_avg_frame_count == 0:
-            end_time = time.time()
-            fps = fps_avg_frame_count / (end_time - start_time)
-            start_time = time.time()
+        # # Calculate FPS
+        # if counter % fps_avg_frame_count == 0:
+        #     end_time = time.time()
+        #     fps = fps_avg_frame_count / (end_time - start_time)
+        #     start_time = time.time()
 
-        # Show FPS on screen
-        fps_text = 'FPS = {:.1f}'.format(fps)
-        text_location = (left_margin, row_size)
-        cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN,
-                    font_size, text_color, font_thickness)
+        # # Show FPS on screen
+        # fps_text = 'FPS = {:.1f}'.format(fps)
+        # text_location = (left_margin, row_size)
+        # cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN,
+        #             font_size, text_color, font_thickness)
 
-        cv2.imshow('Object Detector', image)
+        # cv2.imshow('Object Detector', image)
 
         if cv2.waitKey(1) == 27:
             break

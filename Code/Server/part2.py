@@ -8,6 +8,9 @@ from gpiozero import DistanceSensor
 import numpy as np
 import Led
 import time
+import Scan
+import threading
+import shared
 
 
 GOOD_THRESHOLD = 5
@@ -16,6 +19,10 @@ servo = serv.Servo()
 servo.setServoPwm('0', 90)
 
 move = mov.Move()
+
+s = Scan.Scan()
+
+leds = Led.Led()
 
 trigger_pin = 27
 echo_pin    = 22
@@ -32,6 +39,8 @@ cur_x = int(sys.argv[1])
 cur_y = int(sys.argv[2])
 cur_angle = 90
 
+camera_thread = threading.Thread(target=camera.run)
+
 while not (abs(cur_x - goal_x) < GOOD_THRESHOLD and abs(cur_y - goal_y) < GOOD_THRESHOLD):
     
     """
@@ -42,58 +51,62 @@ while not (abs(cur_x - goal_x) < GOOD_THRESHOLD and abs(cur_y - goal_y) < GOOD_T
     with the updated map, run A* and do the first 5-10 steps, which should not be that far
     repeat until we are at the destination
     """
-    for angle in SERVO_ANGLES:
-        servo.setServoPwm('0', angle)
-        cur_dist = ultrosinic_sensor.distance
-        # update the map with Emma's code
+    map = s.get_map((cur_x, cur_y), cur_angle)
     
-    directions = solve_maze.a_star_search()
+    directions = solve_maze.a_star_search(map, cur_x, cur_y)
 
     for i in directions[:min(len(directions), 5)]:
         # turn to correct angle
         # move forward
         # repeat
+
+        # handle the stopping for a stop sign, and turn on the lights
+        if shared.should_stop.is_set():
+            move.stop()
+            leds.ledIndex(255, 255, 255, 255)
+            time.sleep(2)
+            leds.ledMode('0')
+            shared.should_stop.clear()
+
         cur_dir = directions[i]
 
         match cur_dir:
             case solve_maze.DIR.RIGHT:
                 needed_angle = 90
+                dx, dy = 1, 0
             case solve_maze.DIR.DOWN_RIGHT:
                 needed_angle = 135
+                dx, dy = 1, -1
             case solve_maze.DIR.DOWN:
                 needed_angle = 180
+                dx, dy = 0, -1
             case solve_maze.DIR.DOWN_LEFT:
                 needed_angle = 225
+                dx, dy = -1, -1
             case solve_maze.DIR.LEFT:
                 needed_angle = 270
+                dx, dy = -1, 0
             case solve_maze.DIR.UP_LEFT:
                 needed_angle = 315
+                dx, dy = -1, 1
             case solve_maze.DIR.UP:
                 needed_angle = 0
+                dx, dy = 0, 1
             case solve_maze.DIR.UP_RIGHT:
                 needed_angle = 45
+                dx, dy = 1, 1
             case _:
                 needed_angle = 0
 
-        
-        # if cur_angle < needed_angle:
-        #     if needed_angle - cur_angle < cur_angle + 360 - needed_angle:
-        #         move.left(needed_angle - cur_angle)
-        #     else:
-        #         move.right(cur_angle + 360 - needed_angle)
-        # elif cur_angle > needed_angle:
-        #     if cur_angle - needed_angle < needed_angle + 360 - cur_angle:
-        #         move.right(cur_angle - needed_angle)
-        #     else:
-        #         move.left(needed_angle + 360 - cur_angle)
-        
         mod_val = (needed_angle - cur_angle) % 360
 
-        if mod_val > 180:
-            move.left(360 - mod_val)
-            print(f"turning CCW {360 - mod_val:.2f} degrees")
-        else:
-            move.right(mod_val)
-            print(f"turning CW {mod_val:.2f} degrees")
+        if needed_angle != cur_angle:
+            if mod_val > 180:
+                move.left(360 - mod_val)
+            else:
+                move.right(mod_val)
         
+
         cur_angle = needed_angle
+        cur_x += dx
+        cur_y += dy
