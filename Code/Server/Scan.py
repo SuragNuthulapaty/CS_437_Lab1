@@ -55,6 +55,22 @@ class Scan:
 
         self.pwm_S.setServoPwm("1", 80) # reset servo
 
+    def get_map(self, position, angle, padded=True):
+        """
+        update the car's position, perform a scan, and return the updated map
+
+        position: car's current (x, y) coordinate on the map
+        angle: direction the car is facing, relative to the map
+        padded: whether the map should include padding
+        """
+        self.x, self.y = position
+        self.angle = angle
+
+        self.update_map()
+        if padded:
+            return self.padded_map()
+        return self.map
+
     def read(self, angle=90):
         """
         return the distance in cm, or -1 if car cannot read angle
