@@ -12,7 +12,17 @@ class DIR(enum.Enum):
     DOWN_LEFT = 6
     UP_LEFT = 7
 
-# https://www.geeksforgeeks.org/a-search-algorithm-in-python/
+"""
+https://www.geeksforgeeks.org/a-search-algorithm-in-python/
+
+This code was nearly entirely pulled from the above link which was a resource we used 
+in order to learn how A* works, and how to implement it specifically
+
+The big changes we made was the back tracking approach. We created the DIR class
+and developed the trace_path function to return distances instead of just printing
+what the path the algirithm foudn was. Doing it this way allowed us to command the 
+car to moce in specific directions
+"""
 
 class Cell:
     def __init__(self):
@@ -22,19 +32,44 @@ class Cell:
         self.g = float('inf')
         self.h = 0
 
-ROW = 9
-COL = 10
+# grid = [
+#         [1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
+#         [1, 1, 1, 0, 1, 1, 1, 0, 1, 1],
+#         [1, 1, 1, 0, 1, 1, 0, 1, 0, 1],
+#         [0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+#         [1, 1, 1, 0, 1, 1, 1, 0, 1, 0],
+#         [1, 0, 1, 1, 1, 1, 0, 1, 0, 0],
+#         [1, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+#         [1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
+#         [1, 1, 1, 0, 0, 0, 1, 0, 0, 1]
+#     ]
+# src = [8, 0]
+# dest = [0, 0]
 
-def is_valid(row, col):
+grid = [
+        [0, 1],
+        [1, 1]
+    ]
+src = [1, 0]
+dest = [1, 1]
+
+ROW = len(grid)
+COL = len(grid[1])
+
+def is_valid(src):
+    row, col = src
     return (row >= 0) and (row < ROW) and (col >= 0) and (col < COL)
 
-def is_unblocked(grid, row, col):
-    return grid[row][col] == 0
+def is_unblocked(grid, src):
+    row, col = src
+    return grid[row][col] == 1
 
-def is_destination(row, col, dest):
+def is_destination(src, dest):
+    row, col = src
     return row == dest[0] and col == dest[1]
 
-def calculate_h_value(row, col, dest):
+def calculate_h_value(src, dest):
+    row, col = src
     return ((row - dest[0]) ** 2 + (col - dest[1]) ** 2) ** 0.5
 
 def trace_path(cell_details, dest):
@@ -51,10 +86,12 @@ def trace_path(cell_details, dest):
 
     path.append((row, col))
     path.reverse()
+
+    print(path)
     
     dirs = []
 
-    for i in range(len(path[1:])):
+    for i in range(1, len(path)):
         delta_x = path[i][0] - path[i - 1][0]
         delta_y = path[i][1] - path[i - 1][1]
 
@@ -78,14 +115,14 @@ def trace_path(cell_details, dest):
     return dirs
 
 def a_star_search(grid, src, dest):
-    if not is_valid(src[0], src[1]) or not is_valid(dest[0], dest[1]):
-        return
+    if not is_valid(src) or not is_valid(dest):
+        return []
 
-    if not is_unblocked(grid, src[0], src[1]) or not is_unblocked(grid, dest[0], dest[1]):
-        return
+    if not is_unblocked(grid, src) or not is_unblocked(grid, dest):
+        return []
 
-    if is_destination(src[0], src[1], dest):
-        return
+    if is_destination(src, dest):
+        return []
 
     closed_list = [[False for _ in range(COL)] for _ in range(ROW)]
     cell_details = [[Cell() for _ in range(COL)] for _ in range(ROW)]
@@ -116,17 +153,16 @@ def a_star_search(grid, src, dest):
             new_i = i + dir[0]
             new_j = j + dir[1]
 
-            if is_valid(new_i, new_j) and is_unblocked(grid, new_i, new_j) and not closed_list[new_i][new_j]:
-                if is_destination(new_i, new_j, dest):
+            if is_valid((new_i, new_j)) and is_unblocked(grid, (new_i, new_j)) and not closed_list[new_i][new_j]:
+                if is_destination((new_i, new_j), dest):
                     cell_details[new_i][new_j].parent_i = i
                     cell_details[new_i][new_j].parent_j = j
                     dirs = trace_path(cell_details, dest)
-                    print(dirs)
                     found_dest = True
-                    return
+                    return dirs
                 else:
                     g_new = cell_details[i][j].g + 1.0
-                    h_new = calculate_h_value(new_i, new_j, dest)
+                    h_new = calculate_h_value((new_i, new_j), dest)
                     f_new = g_new + h_new
 
                     if cell_details[new_i][new_j].f == float('inf') or cell_details[new_i][new_j].f > f_new:
@@ -139,25 +175,22 @@ def a_star_search(grid, src, dest):
 
     if not found_dest:
         print("Failed to find the destination cell")
+    
+    return [DIR.DOWN]
 
 
 def main():
-    grid = [
-        [1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
-        [1, 1, 1, 0, 1, 1, 1, 0, 1, 1],
-        [1, 1, 1, 0, 1, 1, 0, 1, 0, 1],
-        [0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
-        [1, 1, 1, 0, 1, 1, 1, 0, 1, 0],
-        [1, 0, 1, 1, 1, 1, 0, 1, 0, 0],
-        [1, 0, 0, 0, 0, 1, 0, 0, 0, 1],
-        [1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
-        [1, 1, 1, 0, 0, 0, 1, 0, 0, 1]
-    ]
+    for i in list(range(COL))[::-1]:
+        for j in range(ROW):
+            if src[0] == j and src[1] == i:
+                print('A', end=" ")
+            elif dest[0] == j and dest[1] == i:
+                print('X', end=" ")
+            else:
+                print(grid[j][i], end=" ")
+        print()
 
-    src = [8, 0]
-    dest = [0, 0]
-
-    a_star_search(grid, src, dest)
+    print(a_star_search(grid, src, dest))
 
 
 if __name__ == "__main__":
