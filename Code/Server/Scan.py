@@ -12,7 +12,16 @@ git pull
 """
 
 class Scan:
-    def __init__(self, max_dist=50, start=(0, 50), dest=(99,99), angle=0, angle_incr=5, map_size=(100,100)):
+    def __init__(self,
+                 max_dist=50,
+                 start=(0, 50),
+                 dest=(99,99),
+                 angle=0,
+                 angle_incr=5,
+                 map_size=(100,100),
+                 padding_size=11,
+                 filter_size=5,
+         ):
         """
         max_dist: maximum distance threshold (eg viewable distance)
         start: starting position on (100, 100) map
@@ -24,6 +33,8 @@ class Scan:
             270 is towards [x, 0]
         angle_incr: angle increments at which to scan
         map_size: size of array representing map
+        clearance_size: width of padding added to map to represent car clearance
+        filter_size: width of denoising filter
         """
 
         self.ultrasonic = Ultrasonic() # sensor
@@ -35,14 +46,14 @@ class Scan:
         self.dest = dest
         self.angle_incr = angle_incr
 
+        self.padding = np.ones((11, 11)) # shape of added clearance
+        self.filter = np.ones((5, 5)) # shape of de-noising convolution kernel
+
         self.map = np.zeros(map_size) # map of obstacles, where 0 represents an emtpy space
         self.x = start[0] # current position is self.map[self.x, self.y], facing self.angle
         self.y = start[1]
 
         self.pwm_S.setServoPwm("1", 80) # reset servo
-
-        self.padding = np.ones((11, 11)) # shape of added clearance
-        self.filter = np.ones((3, 3)) # shape of de-noising convolution kernel
 
     def read(self, angle=90):
         """
