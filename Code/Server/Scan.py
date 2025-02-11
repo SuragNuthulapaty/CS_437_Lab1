@@ -8,7 +8,7 @@ from scipy.ndimage import binary_dilation, convolve
 """
 cd CS_437_Lab1/Code/Server
 git pull
-
+python -i Scan.py
 """
 
 class Scan:
@@ -19,8 +19,8 @@ class Scan:
                  angle=0,
                  angle_incr=5,
                  map_size=(100,100),
-                 padding_size=11,
-                 filter_size=5,
+                 padding=(11, 11),
+                 filter=(5, 5),
          ):
         """
         max_dist: maximum distance threshold (eg viewable distance)
@@ -33,8 +33,8 @@ class Scan:
             270 is towards [x, 0]
         angle_incr: angle increments at which to scan
         map_size: size of array representing map
-        clearance_size: width of padding added to map to represent car clearance
-        filter_size: width of denoising filter
+        clearance_size: shape of padding added to map to represent car clearance
+        filter_size: shape of denoising filter
         """
 
         self.ultrasonic = Ultrasonic() # sensor
@@ -46,8 +46,8 @@ class Scan:
         self.dest = dest
         self.angle_incr = angle_incr
 
-        self.padding = np.ones((11, 11)) # shape of added clearance
-        self.filter = np.ones((5, 5)) # shape of de-noising convolution kernel
+        self.padding = np.ones(padding) # shape of added clearance
+        self.filter = np.ones(filter) # shape of de-noising convolution kernel
 
         self.map = np.zeros(map_size) # map of obstacles, where 0 represents an emtpy space
         self.x = start[0] # current position is self.map[self.x, self.y], facing self.angle
