@@ -8,7 +8,7 @@ from scipy.ndimage import binary_dilation, convolve
 """
 cd CS_437_Lab1/Code/Server
 git pull
-python -i Scan.py
+
 """
 
 class Scan:
@@ -51,7 +51,7 @@ class Scan:
         angle: angle of reading relative to map
         """
         sensor_angle = angle - self.angle
-        if 30 <= sensor_angle <= 150: # restrict angle to +- 60 deg
+        if 50 <= sensor_angle <= 130: # restrict angle to +- 60 deg
             # take distance reading
             self.pwm_S.setServoPwm("0", sensor_angle)
             time.sleep(0.2)
