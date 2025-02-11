@@ -86,8 +86,6 @@ class Scan:
     def update_map(self):
         """
         perform a 180 degree scan at the current position, and update the map accordingly
-
-        note that interpolation may have some small gaps due to rounding
         """
         x0, y0 = -1, -1 # coordinates at previous angle
         for angle in range(0, 360, self.angle_incr):
@@ -101,29 +99,29 @@ class Scan:
                 if 0 <= x < self.map.shape[0] and 0 <= y < self.map.shape[1]:
                     self.map[x][y] = 1
 
-                    print(f"({x}, {y}) <- d={dist}, a={angle} <- {(x0, y0)}") # debug
+                    print(f"({x}, {y}) <- d={dist}, a={angle}") # debug
 
                     if 0 <= x0 and 0 <= y0 and ((x - x0) ** 2 + (y - y0) ** 2) < 100:
-                        # interpolate with previous reading
-                        curr = x, y # temporarily store x, y
-                        x0, x, y0, y = min(x, x0), max(x, x0), min(y, y0), max(y, y0) # set x0 < x, y0 < y
-                        print(f"  interpolating {(x0, y0)} -> {(x, y)}") # debug
+                        # interpolate with previous reading; uses Bresenham's line algo
+                        dx = abs(x - x0)
+                        sx = 1 if x0 < x else -1
+                        dy = -abs(y - y0)
+                        sy = 1 if y0 < y else -1
+                        err = dx + dy
 
-                        if (x == x0):
-                            # special case to handle dividing by 0
-                            while y0 < y:
-                                self.map[x][y0] = 1
-                                y0 += 1
-                        else:
-                            m = (y - y0) / (x - x0)
-
-                            while x0 < x:
-                                print(f"    {x0, y0}")
-                                self.map[round(x0)][round(y0)] = max(self.map[round(x0)][round(y0)], 1)
-                                x0 += 1
-                                y0 += m
-
-                        x, y = curr
+                        while True:
+                            self.map[x0][y0] = 1
+                            e2 = 2 * err
+                            if e2 > dy:
+                                if x0 == x:
+                                    break
+                                err += dy
+                                x0 += sx
+                            if e2 < dx:
+                                if y0 == y:
+                                    break
+                                err += dx
+                                y0 += sy
 
                     x0, y0 = x, y
             else:
