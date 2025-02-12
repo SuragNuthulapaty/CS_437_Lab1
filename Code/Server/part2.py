@@ -14,7 +14,6 @@ import shared
 
 
 GOOD_THRESHOLD = 5
-SERVO_ANGLES = [50, 60, 70, 80, 90, 100, 110, 120, 130]
 servo = serv.Servo()
 servo.setServoPwm('0', 90)
 
@@ -30,16 +29,20 @@ ultrosinic_sensor = DistanceSensor(echo=echo_pin, trigger=trigger_pin ,max_dista
 
 grid = np.zeros((200, 200))
 
-if len(sys.argv) != 5:
-    print(f"Usage: python {sys.argv[0]} <start x> <start y> <end x> <end y>")
+if len(sys.argv) != 6:
+    print(f"Usage: python {sys.argv[0]} <start x> <start y> <end x> <end y> <start angle>")
 
 goal_x = int(sys.argv[3])
 goal_y = int(sys.argv[4])
 cur_x = int(sys.argv[1])
 cur_y = int(sys.argv[2])
-cur_angle = 90
+cur_angle = int(sys.argv[5])
 
 camera_thread = threading.Thread(target=camera.run)
+
+camera_thread.start()
+
+time.sleep(2)
 
 while not (abs(cur_x - goal_x) < GOOD_THRESHOLD and abs(cur_y - goal_y) < GOOD_THRESHOLD):
     
