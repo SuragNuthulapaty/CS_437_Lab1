@@ -56,7 +56,7 @@ while not (abs(cur_x - goal_x) < GOOD_THRESHOLD and abs(cur_y - goal_y) < GOOD_T
     """
     map = s.get_map((cur_x, cur_y), cur_angle)
     
-    directions = solve_maze.a_star_search(map, cur_x, cur_y)
+    directions, move_back = solve_maze.a_star_search(map, cur_x, cur_y)
 
     for i in directions[:min(len(directions), 5)]:
         # turn to correct angle
@@ -100,6 +100,10 @@ while not (abs(cur_x - goal_x) < GOOD_THRESHOLD and abs(cur_y - goal_y) < GOOD_T
                 dx, dy = 1, 1
             case _:
                 needed_angle = 0
+        
+        if move_back:
+            move.back()
+            move_back = False
 
         mod_val = (needed_angle - cur_angle) % 360
 
@@ -108,6 +112,11 @@ while not (abs(cur_x - goal_x) < GOOD_THRESHOLD and abs(cur_y - goal_y) < GOOD_T
                 move.left(360 - mod_val)
             else:
                 move.right(mod_val)
+        
+        if cur_dir in [solve_maze.DIR.UP, solve_maze.DIR.DOWN, solve_maze.DIR.RIGHT, solve_maze.DIR.LEFT]:
+            move.forward()
+        else:
+            move.forward(1.41)
         
 
         cur_angle = needed_angle

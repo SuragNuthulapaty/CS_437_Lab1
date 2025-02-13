@@ -159,7 +159,7 @@ def a_star_search(grid, src, dest):
                     cell_details[new_i][new_j].parent_j = j
                     dirs = trace_path(cell_details, dest)
                     found_dest = True
-                    return dirs
+                    return dirs, False
                 else:
                     g_new = cell_details[i][j].g + 1.0
                     h_new = calculate_h_value((new_i, new_j), dest)
@@ -176,7 +176,7 @@ def a_star_search(grid, src, dest):
     if not found_dest:
         print("Failed to find the destination cell")
     
-    return [DIR.DOWN]
+    return [DIR.DOWN], True
 
 
 def main():
