@@ -15,7 +15,7 @@ class Scan:
     def __init__(self,
                  max_dist=50,
                  start=(0, 50),
-                 dest=(99,99),
+                 dest=(299,99),
                  angle=0,
                  angle_incr=5,
                  map_size=(300,100),
