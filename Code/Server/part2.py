@@ -27,7 +27,7 @@ trigger_pin = 27
 echo_pin    = 22
 ultrosinic_sensor = DistanceSensor(echo=echo_pin, trigger=trigger_pin ,max_distance=3)
 
-grid = np.zeros((200, 200))
+grid = np.zeros((300, 100))
 
 if len(sys.argv) != 6:
     print(f"Usage: python {sys.argv[0]} <start x> <start y> <end x> <end y> <start angle>")

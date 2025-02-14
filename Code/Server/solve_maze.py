@@ -32,29 +32,8 @@ class Cell:
         self.g = float('inf')
         self.h = 0
 
-# grid = [
-#         [1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
-#         [1, 1, 1, 0, 1, 1, 1, 0, 1, 1],
-#         [1, 1, 1, 0, 1, 1, 0, 1, 0, 1],
-#         [0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
-#         [1, 1, 1, 0, 1, 1, 1, 0, 1, 0],
-#         [1, 0, 1, 1, 1, 1, 0, 1, 0, 0],
-#         [1, 0, 0, 0, 0, 1, 0, 0, 0, 1],
-#         [1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
-#         [1, 1, 1, 0, 0, 0, 1, 0, 0, 1]
-#     ]
-# src = [8, 0]
-# dest = [0, 0]
-
-grid = [
-        [0, 1],
-        [1, 1]
-    ]
-src = [1, 0]
-dest = [1, 1]
-
-ROW = len(grid)
-COL = len(grid[1])
+ROW = 300
+COL = 100
 
 def is_valid(src):
     row, col = src
@@ -177,21 +156,3 @@ def a_star_search(grid, src, dest):
         print("Failed to find the destination cell")
     
     return [DIR.DOWN], True
-
-
-def main():
-    for i in list(range(COL))[::-1]:
-        for j in range(ROW):
-            if src[0] == j and src[1] == i:
-                print('A', end=" ")
-            elif dest[0] == j and dest[1] == i:
-                print('X', end=" ")
-            else:
-                print(grid[j][i], end=" ")
-        print()
-
-    print(a_star_search(grid, src, dest))
-
-
-if __name__ == "__main__":
-    main()

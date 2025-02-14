@@ -18,7 +18,7 @@ class Scan:
                  dest=(99,99),
                  angle=0,
                  angle_incr=5,
-                 map_size=(100,100),
+                 map_size=(300,100),
                  padding=(11, 11),
                  filter=(5, 5),
          ):
@@ -29,7 +29,7 @@ class Scan:
         angle: starting angle of car with *zeroed channel 0 servo* relative to map
             0 is towards [0, y]
             90 is towards [x, 99]
-            180 is towards [99, y]
+            180 is towards [299, y]
             270 is towards [x, 0]
         angle_incr: angle increments at which to scan
         map_size: size of array representing map
