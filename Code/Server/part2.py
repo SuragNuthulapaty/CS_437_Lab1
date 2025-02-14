@@ -56,7 +56,7 @@ while not (abs(cur_x - goal_x) < GOOD_THRESHOLD and abs(cur_y - goal_y) < GOOD_T
     """
     map = s.get_map((cur_x, cur_y), cur_angle)
     
-    directions, move_back = solve_maze.a_star_search(map, cur_x, cur_y)
+    directions, move_back = solve_maze.a_star_search(map, (cur_x, cur_y), (goal_x, goal_y))
 
     for i in directions[:min(len(directions), 5)]:
         # turn to correct angle
