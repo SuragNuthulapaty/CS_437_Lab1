@@ -1,24 +1,32 @@
-from bleak import BleakServer
-import asyncio
+from bluezero import adapter, device, localGATT
+import time
 
+# Define a custom service UUID
 SERVICE_UUID = "12345678-1234-5678-1234-56789abcdef0"
 CHAR_UUID = "12345678-1234-5678-1234-56789abcdef1"
 
-class SimpleBLEServer:
-    def __init__(self):
-        self.server = BleakServer()
-        self.server.add_service(SERVICE_UUID, [CHAR_UUID])
+class MyService(localGATT.Service):
+    def __init__(self, index):
+        super().__init__(index, SERVICE_UUID, True)
+        self.characteristic = MyCharacteristic(self)
+        self.add_characteristic(self.characteristic)
 
-    async def start(self):
-        print("Starting BLE server...")
-        await self.server.start()
-        print(f"Server running with service UUID: {SERVICE_UUID}")
+class MyCharacteristic(localGATT.Characteristic):
+    def __init__(self, service):
+        super().__init__(0, CHAR_UUID,
+                         ["read", "write"],
+                         service)
+        self.value = b"Hello from Raspberry Pi!"
 
-        while True:
-            await asyncio.sleep(10)  # Keep running
+    def ReadValue(self, options):
+        print("Sending data to client")
+        return self.value
 
-async def main():
-    server = SimpleBLEServer()
-    await server.start()
+    def WriteValue(self, value, options):
+        print(f"Received from client: {bytes(value).decode()}")
+        self.value = bytes(value)
 
-asyncio.run(main())
+# Start BLE server
+app = localGATT.Application()
+app.add_service(MyService(0))
+app.start()
