@@ -1,10 +1,16 @@
+from bleak import BleakScanner, BleakClient
 import asyncio
-from bleak import BleakScanner
 
-async def scan_devices():
+SERVICE_UUID = "12345678-1234-5678-1234-56789abcdef0"
+CHAR_UUID = "12345678-1234-5678-1234-56789abcdef1"
+
+async def connect_and_read():
     devices = await BleakScanner.discover()
     for device in devices:
-        print(f"Address: {device.address}, Name: {device.name}")
+        print(f"Found {device.name} - {device.address}")
+        if SERVICE_UUID in device.metadata.get("uuids", []):
+            async with BleakClient(device.address) as client:
+                value = await client.read_gatt_char(CHAR_UUID)
+                print(f"Received: {value.decode()}")
 
-if __name__ == "__main__":
-    asyncio.run(scan_devices())
+asyncio.run(connect_and_read())
