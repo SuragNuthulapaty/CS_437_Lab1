@@ -2,6 +2,11 @@ import socket
 import threading
 import sys
 import move
+import Ultrasonic
+
+
+ult = Ultrasonic()
+mov = move.Move()
 
 PORT = 65432
 
@@ -19,13 +24,20 @@ def handle_client(client, client_info):
 
             print(str_val, str_val == "l")
             
-            print(f"📩 Received from {client_info}: {data.decode()}")
-            client.sendall(data)  # Echo back the received message
+            if str_val == "l":
+                mov.left()
+            elif str_val == 'r':
+                mov.right()
+            elif str_val == "f":
+                mov.forward()
+            elif str_val == "b":
+                mov.back()
+        
+            client.sendall(ult.get_distance())  # Echo back the received message
     except Exception as e:
-        print(f"❌ Error with {client_info}: {e}")
+        pass
     finally:
         client.close()
-        print(f"🔌 Connection closed: {client_info}")
 
 def start_server(host):
     """Starts the server to listen for incoming connections."""
