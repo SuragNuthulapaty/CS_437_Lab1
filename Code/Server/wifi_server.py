@@ -34,7 +34,7 @@ def start_server(host):
         server_socket.bind((host, PORT))
         server_socket.listen()
 
-        print(f"Server listening on {host}:{port}")
+        print(f"Server listening on {host}:{PORT}")
 
         try:
             while True:
