@@ -15,10 +15,10 @@ def handle_client(client, client_info):
     print(f"🟢 Connected to {client_info}")
     try:
         while True:
-            data = client.recv(1024)  # Receive data (up to 1024 bytes)
+            data = client.recv(1024)
             if not data:
                 print(f"🔴 Client {client_info} disconnected.")
-                break  # Exit the loop if no data is received
+                break
         
             str_val = str((data.decode())).strip()
 
@@ -33,7 +33,7 @@ def handle_client(client, client_info):
             elif str_val == "b":
                 mov.back()
         
-            client.sendall(ult.get_distance())  # Echo back the received message
+            client.sendall(bytes(ult.get_distance()))
     except Exception as e:
         pass
     finally:
