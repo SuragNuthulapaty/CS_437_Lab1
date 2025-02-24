@@ -15,6 +15,14 @@ def handle_client(client, client_info):
     try:
         while True:
             data = client.recv(1024)
+
+            v = ult.get_distance()
+            bv = bytes(v)
+
+            print(type(v), v, bv)
+        
+            client.sendall(str(v).encode())
+            
             if not data:
                 print(f"🔴 Client {client_info} disconnected.")
                 break
@@ -31,13 +39,6 @@ def handle_client(client, client_info):
                 mov.forward()
             elif str_val == "b":
                 mov.back()
-
-            v = ult.get_distance()
-            bv = bytes(v)
-
-            print(type(v), v, bv)
-        
-            client.sendall(str(v).encode())
     except Exception as e:
         pass
     finally:
