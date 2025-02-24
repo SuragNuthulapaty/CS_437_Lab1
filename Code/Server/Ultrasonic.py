@@ -7,14 +7,14 @@ import random
 
 REVERSE_THRESHOLD = 60
 
-trigger_pin = 27
-echo_pin    = 22
-sensor = DistanceSensor(echo=echo_pin, trigger=trigger_pin ,max_distance=3)
 class Ultrasonic:
     def __init__(self):        
-        pass
+        trigger_pin = 27
+        echo_pin    = 22
+        self.sensor = DistanceSensor(echo=echo_pin, trigger=trigger_pin ,max_distance=3)
+
     def get_distance(self):     # get the measurement results of ultrasonic module,with unit: cm
-        distance_cm = sensor.distance * 100
+        distance_cm = self.sensor.distance * 100
         return  int(distance_cm)
     
     def run_motor(self, M):

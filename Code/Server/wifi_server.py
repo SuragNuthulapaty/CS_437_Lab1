@@ -5,7 +5,7 @@ import move
 import Ultrasonic
 
 
-ult = Ultrasonic()
+ult = Ultrasonic.Ultrasonic()
 mov = move.Move()
 
 PORT = 65432
