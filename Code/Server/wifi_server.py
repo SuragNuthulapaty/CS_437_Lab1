@@ -35,7 +35,7 @@ def handle_client(client, client_info):
             v = ult.get_distance()
             bv = bytes(v)
 
-            print(v, bv)
+            print(type(v), v, bv)
         
             client.sendall(bv)
     except Exception as e:
