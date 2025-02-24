@@ -37,7 +37,7 @@ def handle_client(client, client_info):
 
             print(type(v), v, bv)
         
-            client.sendall(str(v))
+            client.sendall(str(v).encode())
     except Exception as e:
         pass
     finally:
