@@ -15,7 +15,7 @@ def handle_client(client, client_info):
                 print(f"🔴 Client {client_info} disconnected.")
                 break  # Exit the loop if no data is received
         
-            str_val = str((data.decode()))
+            str_val = str((data.decode())).__repr__()
 
             print(str_val, str_val == "l")
             
@@ -33,6 +33,8 @@ def start_server(host):
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind((host, PORT))
         server_socket.listen()
+
+        print(f"Server listening on {host}:{port}")
 
         try:
             while True:
