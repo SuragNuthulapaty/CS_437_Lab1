@@ -1,6 +1,7 @@
 import socket
 import threading
 import sys
+import move
 
 PORT = 65432
 
@@ -13,6 +14,10 @@ def handle_client(client, client_info):
             if not data:
                 print(f"🔴 Client {client_info} disconnected.")
                 break  # Exit the loop if no data is received
+        
+            str_val = str((data.decode()))
+
+            print(str_val, str_val == "l")
             
             print(f"📩 Received from {client_info}: {data.decode()}")
             client.sendall(data)  # Echo back the received message

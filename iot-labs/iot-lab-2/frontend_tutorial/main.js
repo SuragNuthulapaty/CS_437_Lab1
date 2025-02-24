@@ -2,17 +2,17 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const net = require("net");
 
 let mainWindow;
-const SERVER_HOST = "10.195.7.214";  // Raspberry Pi IP
-const SERVER_PORT = 65432;            // Server Port
+const SERVER_HOST = "10.195.7.214";
+const SERVER_PORT = 65432;
 
 app.whenReady().then(() => {
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration: false,  // Security best practice
+            nodeIntegration: false,
             contextIsolation: true,
-            preload: __dirname + "/preload.js",  // Use a preload script for IPC
+            preload: __dirname + "/preload.js",
         },
     });
 
