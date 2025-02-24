@@ -1,17 +1,21 @@
-<html>
-
-<script src="index.js"></script>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Client</title>
+</head>
 <body>
-<h1>My First Website</h1>
-<p>Hello IoT!</p>
+    <h1>My First Website</h1>
+    <p>Hello IoT!</p>
 
-My name is: <input id="myName" type="text" placeholder="name"/>
-<button class="btn btn-success" onclick="greeting()">Sumbit</button>
-<br>
-<span id="greet"> </span>
-<br>
-<span id="greet_from_server"> </span>
+    <label>My name: </label>
+    <input id="myName" type="text" placeholder="name"/>
+    <button onclick="sendData()">Submit</button>
+    
+    <br>
+    <span id="greet_from_server"></span>
+
+    <script src="index.js"></script>
 </body>
-
 </html>

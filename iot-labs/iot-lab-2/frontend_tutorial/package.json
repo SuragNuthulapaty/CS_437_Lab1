@@ -2,16 +2,16 @@
   "name": "tutorial",
   "version": "1.0.0",
   "main": "main.js",
+  "description": "",
   "scripts": {
-    "start": "electron .",
+    "start": "npx electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "electron": "^10.1.6"
-  },
   "dependencies": {},
-  "description": ""
+  "devDependencies": {
+    "electron": "^32.1.2"
+  }
 }
