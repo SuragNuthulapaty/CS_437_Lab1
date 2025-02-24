@@ -7,7 +7,6 @@ import Ultrasonic
 
 ult = Ultrasonic.Ultrasonic()
 mov = move.Move()
-
 PORT = 65432
 
 def handle_client(client, client_info):
@@ -32,8 +31,13 @@ def handle_client(client, client_info):
                 mov.forward()
             elif str_val == "b":
                 mov.back()
+
+            v = ult.get_distance()
+            bv = bytes(v)
+
+            print(v, bv)
         
-            client.sendall(bytes(ult.get_distance()))
+            client.sendall(bv)
     except Exception as e:
         pass
     finally:
