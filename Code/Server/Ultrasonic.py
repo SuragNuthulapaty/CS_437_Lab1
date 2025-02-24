@@ -95,11 +95,10 @@ class Ultrasonic:
             print(M)
             self.run_motor(M)
             
-            
-        
-ultrasonic=Ultrasonic()              
+                        
 # Main program logic follows:
 if __name__ == '__main__':
+    ultrasonic=Ultrasonic()  
     print ('Program is starting ... ')
     try:
         ultrasonic.run()
