@@ -15,7 +15,7 @@ def handle_client(client, client_info):
                 print(f"🔴 Client {client_info} disconnected.")
                 break  # Exit the loop if no data is received
         
-            str_val = str((data.decode())).__repr__()
+            str_val = str((data.decode())).strip()
 
             print(str_val, str_val == "l")
             
