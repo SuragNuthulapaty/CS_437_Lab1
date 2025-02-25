@@ -3,18 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IoT Client</title>
+    <title>IoT Robot Controller</title>
 </head>
 <body>
-    <h1>My First Website</h1>
-    <p>Hello IoT!</p>
+    <h1>IoT Robot Controller</h1>
 
-    <label>My name: </label>
-    <input id="myName" type="text" placeholder="name"/>
-    <button onclick="sendData()">Submit</button>
-    
-    <br>
-    <span id="greet_from_server"></span>
+    <label for="ipAddress">Enter Server IP:</label>
+    <input type="text" id="ipAddress" placeholder="e.g., 10.195.7.214">
+    <button onclick="connectToServer()">Connect</button>
+
+    <p>Status: <span id="status">Not Connected</span></p>
+    <p>Distance from sensor: <span id="distance">N/A</span></p>
+
+    <button onclick="sendCommand('f')">Forward</button>
+    <button onclick="sendCommand('b')">Backward</button>
+    <button onclick="sendCommand('l')">Left</button>
+    <button onclick="sendCommand('r')">Right</button>
 
     <script src="index.js"></script>
 </body>
