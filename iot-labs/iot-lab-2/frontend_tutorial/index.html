@@ -3,17 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IoT Robot Controller</title>
+    <title>IoT Robot Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1>IoT Robot Controller</h1>
+    <h1>IoT Robot Dashboard</h1>
 
     <label for="ipAddress">Enter Server IP:</label>
     <input type="text" id="ipAddress" placeholder="e.g., 10.195.7.214">
     <button onclick="connectToServer()">Connect</button>
 
     <p>Status: <span id="status">Not Connected</span></p>
-    <p>Distance from sensor: <span id="distance">N/A</span></p>
+
+    <h3>Distance Sensor</h3>
+    <canvas id="distanceChart"></canvas>
+
+    <h3>Speed</h3>
+    <canvas id="speedChart"></canvas>
+
+    <h3>Battery</h3>
+    <canvas id="batteryChart"></canvas>
+
+    <p>Last Direction: <span id="direction">N/A</span></p>
 
     <button onclick="sendCommand('f')">Forward</button>
     <button onclick="sendCommand('b')">Backward</button>
