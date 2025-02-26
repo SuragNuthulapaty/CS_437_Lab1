@@ -5,6 +5,7 @@ import move_non_block
 import Ultrasonic
 import sys
 import time
+import numpy as np
 
 ult = Ultrasonic.Ultrasonic()
 mov = move_non_block.Move()
@@ -12,7 +13,7 @@ PORT = 65432
 
 def handle_client(client, client_info):
     """Handles communication with a connected client."""
-    print(f"✅ Connected to {client_info}")
+    print(f"Connected to {client_info}")
     start_time = 0
 
     currently_moving = False
@@ -26,7 +27,7 @@ def handle_client(client, client_info):
                 currently_moving = False
 
             if data:
-                print(f"❌ Client {client_info} disconnected.")
+                print(f"Client {client_info} disconnected.")
         
                 str_val = data.decode().strip()
                 print(f"Received: {str_val}")
@@ -47,9 +48,9 @@ def handle_client(client, client_info):
 
             sensor_data = {
                 "distance": ult.get_distance(),
-                "speed": 0.1,
-                "battery": 5,
-                "direction": "l" 
+                "speed": np.random.randint(0, 5),
+                "battery":  np.random.randint(0, 5),
+                "direction": np.random.choice(['l', 'r', 'f', 'b']) 
             }
 
             json_data = json.dumps(sensor_data)
@@ -69,7 +70,7 @@ def start_server(host):
         server_socket.bind((host, PORT))
         server_socket.listen()
 
-        print(f"🚀 Server listening on port {PORT}")
+        print(f"Server listening on port {PORT}")
 
         try:
             while True:
@@ -77,9 +78,9 @@ def start_server(host):
                 client_thread = threading.Thread(target=handle_client, args=(client, client_info), daemon=True)
                 client_thread.start()
         except KeyboardInterrupt:
-            print("\n❌ Server shutting down.")
+            print("\nServer shutting down.")
         except Exception as e:
-            print(f"❌ Server error: {e}")
+            print(f"Server error: {e}")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
