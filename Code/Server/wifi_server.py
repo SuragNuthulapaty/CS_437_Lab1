@@ -1,35 +1,49 @@
 import socket
 import threading
 import json
-import move
+import move_non_block
 import Ultrasonic
 import sys
 import time
 
 ult = Ultrasonic.Ultrasonic()
-mov = move.Move()
+mov = move_non_block.Move()
 PORT = 65432
 
 def handle_client(client, client_info):
     """Handles communication with a connected client."""
     print(f"✅ Connected to {client_info}")
+    start_time = 0
+
+    currently_moving = False
+
     try:
         while True:
             data = client.recv(1024)
+
+            if currently_moving and time.time() - start_time > sleep_time:
+                mov.stop()
+                currently_moving = False
+
             if data:
                 print(f"❌ Client {client_info} disconnected.")
         
                 str_val = data.decode().strip()
                 print(f"Received: {str_val}")
 
-                if str_val == "l":
-                    mov.left()
-                elif str_val == "r":
-                    mov.right()
-                elif str_val == "f":
-                    mov.forward()
-                elif str_val == "b":
-                    mov.back()
+                if not currently_moving:
+                    if str_val == "l":
+                        sleep_time = mov.left()
+                        currently_moving = True
+                    elif str_val == "r":
+                        sleep_time = mov.right()
+                        currently_moving = True
+                    elif str_val == "f":
+                        sleep_time = mov.forward()
+                        currently_moving = True
+                    elif str_val == "b":
+                        sleep_time = mov.back()
+                        currently_moving = True
 
             sensor_data = {
                 "distance": ult.get_distance(),
