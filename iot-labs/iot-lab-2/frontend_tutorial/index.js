@@ -40,6 +40,8 @@ function connectToServer() {
     }
 
     serverIP = document.getElementById("ipAddress").value;
+
+
     if (!serverIP) {
         alert("Please enter a valid IP address!");
         return;

@@ -4,6 +4,7 @@ import json
 import move
 import Ultrasonic
 import sys
+import time
 
 ult = Ultrasonic.Ultrasonic()
 mov = move.Move()
@@ -15,21 +16,20 @@ def handle_client(client, client_info):
     try:
         while True:
             data = client.recv(1024)
-            if not data:
+            if data:
                 print(f"❌ Client {client_info} disconnected.")
-                break
         
-            str_val = data.decode().strip()
-            print(f"Received: {str_val}")
+                str_val = data.decode().strip()
+                print(f"Received: {str_val}")
 
-            if str_val == "l":
-                mov.left()
-            elif str_val == "r":
-                mov.right()
-            elif str_val == "f":
-                mov.forward()
-            elif str_val == "b":
-                mov.back()
+                if str_val == "l":
+                    mov.left()
+                elif str_val == "r":
+                    mov.right()
+                elif str_val == "f":
+                    mov.forward()
+                elif str_val == "b":
+                    mov.back()
 
             sensor_data = {
                 "distance": ult.get_distance(),
@@ -40,6 +40,8 @@ def handle_client(client, client_info):
 
             json_data = json.dumps(sensor_data)
             client.sendall(json_data.encode())
+
+            time.sleep(0.1)
 
     except Exception as e:
         print(f"Error: {e}")
