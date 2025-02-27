@@ -6,13 +6,23 @@ import Ultrasonic
 import sys
 import time
 import numpy as np
+from picamera2 import Picamera2, MappedArray
+import pickle
+import struct
 
 ult = Ultrasonic.Ultrasonic()
 mov = move_non_block.Move()
+picam2 = Picamera2()
+picam2.configure(picam2.create_video_configuration(main={"size": (640, 480)}))
+picam2.start()
+
 PORT = 65432
 
+def capture_frame():
+    with MappedArray(picam2.capture_array("main")) as frame:
+        return picam2.encode_image(frame)
+
 def handle_client(client, client_info):
-    """Handles communication with a connected client."""
     print(f"Connected to {client_info}")
     start_time = 0
 
@@ -52,12 +62,17 @@ def handle_client(client, client_info):
                     start_time = time.time()
 
             print("sending")
+            
+            frame = capture_frame()
+            data = pickle.dumps(frame)
+            size = struct.pack(">L", len(data))
+
+
 
             sensor_data = {
                 "distance": ult.get_distance(),
-                "speed": np.random.randint(0, 5),
-                "battery":  np.random.randint(0, 5),
-                "direction": 1 if currently_moving else 0
+                "direction": 1 if currently_moving else 0,
+                "img": (size + data)
             }
 
             json_data = json.dumps(sensor_data)

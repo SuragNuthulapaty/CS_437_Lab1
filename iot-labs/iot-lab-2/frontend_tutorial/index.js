@@ -4,12 +4,8 @@ let client = null;
 let serverIP = "";
 const serverPort = 65432;
 
-// Chart.js data
 const distanceData = [];
-const speedData = [];
-const batteryData = [];
 
-// Create charts
 const distanceChart = new Chart(document.getElementById("distanceChart"), {
     type: 'line',
     data: {
@@ -18,25 +14,10 @@ const distanceChart = new Chart(document.getElementById("distanceChart"), {
     }
 });
 
-const speedChart = new Chart(document.getElementById("speedChart"), {
-    type: 'line',
-    data: {
-        labels: [],
-        datasets: [{ label: 'Speed (m/s)', data: speedData, borderColor: 'green', fill: false }]
-    }
-});
-
-const batteryChart = new Chart(document.getElementById("batteryChart"), {
-    type: 'line',
-    data: {
-        labels: [],
-        datasets: [{ label: 'Battery (%)', data: batteryData, borderColor: 'red', fill: false }]
-    }
-});
 
 function connectToServer() {
     if (client) {
-        client.destroy(); // Close any existing connection
+        client.destroy();
     }
 
     serverIP = document.getElementById("ipAddress").value;
@@ -66,6 +47,14 @@ function connectToServer() {
     });
 }
 
+function disconnectFromServer() {
+    if (client) {
+        client.destroy()
+
+        distanceData = []
+    }
+}
+
 function startListening() {
     client.on("data", (data) => {
         try {
@@ -75,23 +64,49 @@ function startListening() {
             document.getElementById("direction").innerText = jsonData.direction;
 
             // Update charts
-            updateChart(distanceChart, distanceData, jsonData.distance);
-            updateChart(speedChart, speedData, jsonData.speed);
-            updateChart(batteryChart, batteryData, jsonData.battery);
+            // updateChart(distanceChart, distanceData, jsonData.distance);
 
-            console.log("📡 Received from server:", jsonData);
+            let max_v = 100
+            distanceData.push(jsonData.distance);
+            distanceChart.data.labels.push(new Date().toLocaleTimeString());
+
+            console.log(distanceData.length, "before")
+
+            if (distanceChart.data.labels.length > max_v) {
+                distanceData.shift();
+                distanceChart.data.labels.shift();
+            }
+
+            console.log(distanceData.length, "after. added", jsonData.distance)
+
+            distanceChart.update();
+
+            console.log("Received from server:", jsonData);
         } catch (error) {
-            console.error("❌ Error parsing JSON:", error);
+            console.error("Error parsing JSON:", error);
         }
+    });
+
+    client.on("camera-frame", (event, base64Image) => {
+        const img = document.getElementById("cameraStream");
+        img.src = `data:image/jpeg;base64,${base64Image}`;
     });
 }
 
 function updateChart(chart, dataset, newValue) {
     let max_v = 100
     dataset.push(newValue);
-    if (dataset.length > max_v) dataset.shift(); // Keep only last 10 values
     chart.data.labels.push(new Date().toLocaleTimeString());
-    if (chart.data.labels.length > max_v) chart.data.labels.shift();
+
+    console.log(dataset.length, "before")
+
+    if (chart.data.labels.length > max_v) {
+        dataset.shift();
+        chart.data.labels.shift();
+    }
+
+    console.log(dataset.length, "after. added", newValue)
+
     chart.update();
 }
 

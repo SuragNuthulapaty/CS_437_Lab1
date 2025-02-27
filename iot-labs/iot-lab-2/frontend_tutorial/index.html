@@ -12,17 +12,15 @@
     <label for="ipAddress">Enter Server IP:</label>
     <input type="text" id="ipAddress" placeholder="">
     <button onclick="connectToServer()">Connect</button>
+    <button onclick="disconnectFromServer()">Disconnect</button>
 
     <p>Status: <span id="status">Not Connected</span></p>
 
     <h3>Distance Sensor</h3>
     <canvas id="distanceChart"></canvas>
 
-    <h3>Speed</h3>
-    <canvas id="speedChart"></canvas>
-
-    <h3>Battery</h3>
-    <canvas id="batteryChart"></canvas>
+    <h3>Live Video Stream</h3>
+    <img id="cameraStream" width="640" height="480" />
 
     <p>Last Direction: <span id="direction">N/A</span></p>
 
