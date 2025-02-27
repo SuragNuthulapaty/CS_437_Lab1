@@ -19,8 +19,7 @@ picam2.start()
 PORT = 65432
 
 def capture_frame():
-    with MappedArray(picam2.capture_array("main")) as frame:
-        return picam2.encode_image(frame)
+    return picam2.capture_image("jpeg")
 
 def handle_client(client, client_info):
     print(f"Connected to {client_info}")
