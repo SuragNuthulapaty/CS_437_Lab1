@@ -48,6 +48,8 @@ def handle_client(client, client_info):
                     elif str_val == "b":
                         sleep_time = mov.back()
                         currently_moving = True
+                    
+                    start_time = time.time()
 
             print("sending")
 
