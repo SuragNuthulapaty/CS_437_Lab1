@@ -87,10 +87,11 @@ function startListening() {
 }
 
 function updateChart(chart, dataset, newValue) {
+    let max_v = 100
     dataset.push(newValue);
-    if (dataset.length > 10) dataset.shift(); // Keep only last 10 values
+    if (dataset.length > max_v) dataset.shift(); // Keep only last 10 values
     chart.data.labels.push(new Date().toLocaleTimeString());
-    if (chart.data.labels.length > 10) chart.data.labels.shift();
+    if (chart.data.labels.length > max_v) chart.data.labels.shift();
     chart.update();
 }
 
