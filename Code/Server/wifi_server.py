@@ -9,6 +9,7 @@ import numpy as np
 from picamera2 import Picamera2, MappedArray
 import pickle
 import struct
+from io import BytesIO
 
 ult = Ultrasonic.Ultrasonic()
 mov = move_non_block.Move()
@@ -19,7 +20,10 @@ picam2.start()
 PORT = 65432
 
 def capture_frame():
-    return picam2.capture_image("jpeg")
+    image = picam2.capture_image()
+    byte_io = BytesIO()
+    image.save(byte_io, format="JPEG")
+    return byte_io.getvalue()
 
 def handle_client(client, client_info):
     print(f"Connected to {client_info}")
@@ -65,8 +69,6 @@ def handle_client(client, client_info):
             frame = capture_frame()
             data = pickle.dumps(frame)
             size = struct.pack(">L", len(data))
-
-
 
             sensor_data = {
                 "distance": ult.get_distance(),
