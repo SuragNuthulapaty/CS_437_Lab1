@@ -77,6 +77,7 @@ def start_server(host):
         try:
             while True:
                 client, client_info = server_socket.accept()
+                client.setblocking(False)
                 client_thread = threading.Thread(target=handle_client, args=(client, client_info), daemon=True)
                 client_thread.start()
         except KeyboardInterrupt:
