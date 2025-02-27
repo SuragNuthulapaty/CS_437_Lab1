@@ -46,11 +46,13 @@ def handle_client(client, client_info):
                         sleep_time = mov.back()
                         currently_moving = True
 
+            print("sending")
+
             sensor_data = {
                 "distance": ult.get_distance(),
                 "speed": np.random.randint(0, 5),
                 "battery":  np.random.randint(0, 5),
-                "direction": np.random.choice(['l', 'r', 'f', 'b']) 
+                "direction": 1 if currently_moving else 0
             }
 
             json_data = json.dumps(sensor_data)
@@ -84,7 +86,8 @@ def start_server(host):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print(f"Usage: python {sys.argv[0]} <hostname>")
-        exit(1)
+        hostname = "0.0.0.0"
+    else:
+        hostname = sys.argv[1]
 
-    start_server(sys.argv[1])
+    start_server(hostname)
