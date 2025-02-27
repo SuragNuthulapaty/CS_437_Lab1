@@ -20,7 +20,10 @@ def handle_client(client, client_info):
 
     try:
         while True:
-            data = client.recv(1024)
+            try:
+                data = client.recv(1024)
+            except BlockingIOError:
+                data = None
 
             if currently_moving and time.time() - start_time > sleep_time:
                 mov.stop()
