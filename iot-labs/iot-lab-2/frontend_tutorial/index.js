@@ -82,14 +82,13 @@ function startListening() {
             distanceChart.update();
 
             console.log("Received from server:", jsonData);
+
+            const img = document.getElementById("cameraStream");
+            img.src = `data:image/jpeg;base64,${jsonData.img}`;
+
         } catch (error) {
             console.error("Error parsing JSON:", error);
         }
-    });
-
-    client.on("camera-frame", (event, base64Image) => {
-        const img = document.getElementById("cameraStream");
-        img.src = `data:image/jpeg;base64,${base64Image}`;
     });
 }
 
