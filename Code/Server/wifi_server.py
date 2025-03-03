@@ -31,9 +31,9 @@ def handle_client(client, client_info):
             except BlockingIOError:
                 data = None
 
-            # if currently_moving and time.time() - start_time > sleep_time:
-            #     mov.stop()
-            #     currently_moving = False
+            if currently_moving and time.time() - start_time > sleep_time:
+                mov.stop()
+                currently_moving = False
 
             if data:
                 print(f"Client {client_info} disconnected.")
@@ -42,6 +42,10 @@ def handle_client(client, client_info):
                 print(f"Received: {str_val}")
 
                 if not currently_moving:
+                    if "s" in str_val:
+                        mov.stop()
+                        currently_moving = False
+                        
                     if str_val == "l":
                         sleep_time = mov.left()
                         currently_moving = True
