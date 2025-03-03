@@ -12,9 +12,11 @@ import struct
 from io import BytesIO
 import base64
 from vidstream import startStreamingServer
+import servo
 
 ult = Ultrasonic.Ultrasonic()
 mov = move_non_block.Move()
+serv = servo.Servo()
 
 PORT = 65432
 
@@ -62,6 +64,20 @@ def handle_client(client, client_info):
                     elif str_val[0] == "s":
                         mov.stop()
                         currently_moving = False
+                    elif str_val[0] == "0":
+                        mov.stop()
+                        currently_moving = False
+
+                        v = str_val.split()[1]
+
+                        serv.setServoPwm('0', int(v))
+                    elif str_val[0] == "1":
+                        mov.stop()
+                        currently_moving = False
+
+                        v = str_val.split()[1]
+
+                        serv.setServoPwm('1', int(v))
 
                     start_time = time.time()
 

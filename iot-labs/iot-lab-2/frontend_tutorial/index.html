@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IoT Robot Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css">
 </head>
 <body>
     <h1>IoT Robot Dashboard</h1>
@@ -28,6 +30,12 @@
     <button onclick="sendCommand('b')">Backward</button>
     <button onclick="sendCommand('l')">Left</button>
     <button onclick="sendCommand('r')">Right</button>
+
+    <p>Horizontal Angle: <span id="angleValue_0">90</span>°</p>
+    <div id="slider_0"></div>
+
+    <p>Vertical Angle: <span id="angleValue_1">90</span>°</p>
+    <div id="slider_1"></div>
 
     <script src="index.js"></script>
 </body>
