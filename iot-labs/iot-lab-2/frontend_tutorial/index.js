@@ -109,12 +109,35 @@ function updateChart(chart, dataset, newValue) {
     chart.update();
 }
 
+document.addEventListener("keydown", function (event) {
+    let command = null;
+
+    switch (event.key) {
+        case "ArrowUp":
+            command = "f"; // Forward
+            break;
+        case "ArrowDown":
+            command = "b"; // Backward
+            break;
+        case "ArrowLeft":
+            command = "l"; // Left
+            break;
+        case "ArrowRight":
+            command = "r"; // Right
+            break;
+    }
+
+    if (command) {
+        sendCommand(command);
+    }
+});
+
 function sendCommand(command) {
     if (!client || client.destroyed) {
-        console.warn("❌ Not connected to server.");
+        console.warn("Not connected to server.");
         return;
     }
 
     client.write(command);
-    console.log("📤 Sent:", command);
+    console.log("Sent:", command);
 }
