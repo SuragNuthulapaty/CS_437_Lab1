@@ -5,30 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IoT Robot Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link href="./styles.css" rel="stylesheet"></link>
 </head>
 <body>
-    <h1>IoT Robot Dashboard</h1>
 
-    <label for="ipAddress">Enter Server IP:</label>
-    <input type="text" id="ipAddress" placeholder="">
-    <button onclick="connectToServer()">Connect</button>
-    <button onclick="disconnectFromServer()">Disconnect</button>
+<div class="flex flex-row m-4 gap-2">
+    <input class="border border-black rounded-lg w-27 px-2" type="text" id="ipAddress" placeholder="Server IP"
+           value="10.195.7.214">
+    <button class="bg-gray-300 rounded-lg px-2 py-1" id="connect-button" onclick="toggleConnection()">Connect</button>
+</div>
 
-    <p>Status: <span id="status">Not Connected</span></p>
+<main class="hidden flex flex-row w-full">
+    <img src="http://10.195.7.214:8000/stream.mjpg" alt="Server is down!" class="flex-2" />
 
-    <h3>Distance Sensor</h3>
-    <canvas id="distanceChart"></canvas>
+    <div class="flex-1 flex-col">
+        <div class="flex-2">
+            <h3 class="text-xl">Distance Sensor</h3>
+            <canvas id="distanceChart"></canvas>
+        </div>
 
-    <h3>Live Video Stream</h3>
-    <img src="http://10.195.7.214:8000/stream.mjpg" width="640" height="480" />
+        <div class="flex-1">
+            <button onclick="sendCommand('f')">⬆️</button>
+            <button onclick="sendCommand('b')">⬇️</button>
+            <button onclick="sendCommand('l')">⬅️</button>
+            <button onclick="sendCommand('r')">➡️</button>
+        </div>
+    </div>
+</main>
 
-    <p>Currently Moving: <span id="direction">N/A</span></p>
+<script src="index.js"></script>
+<script>
+    let connected = false;
 
-    <button onclick="sendCommand('f')">Forward</button>
-    <button onclick="sendCommand('b')">Backward</button>
-    <button onclick="sendCommand('l')">Left</button>
-    <button onclick="sendCommand('r')">Right</button>
+    function toggleConnection() {
+        const button = document.getElementById("connect-button");
+        document.querySelector("main").classList.toggle("hidden");
 
-    <script src="index.js"></script>
+        if (connected) {
+            button.innerText = "Connect";
+            disconnectFromServer();
+        } else {
+            connected = true;
+            button.innerText = "Disconnect";
+            connectToServer();
+        }
+    }
+</script>
 </body>
 </html>
