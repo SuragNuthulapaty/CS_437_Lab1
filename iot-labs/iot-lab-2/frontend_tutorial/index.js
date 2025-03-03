@@ -4,14 +4,14 @@ let client = null;
 let serverIP = "";
 const serverPort = 65432;
 
-const distanceData = [];
+const data_points = [];
 
 const distanceChart = new Chart(document.getElementById("distanceChart"), {
     type: 'line',
     options: '',
     data: {
         labels: [],
-        datasets: [{ label: 'Distance (cm)', data: distanceData, borderColor: 'blue', fill: false }]
+        datasets: [{ label: 'Distance (cm)', data: [], borderColor: 'blue', fill: false }]
     }
 });
 
@@ -52,7 +52,7 @@ function disconnectFromServer() {
     if (client) {
         client.destroy()
 
-        distanceData = []
+        data_points = []
     }
 }
 
@@ -67,15 +67,17 @@ function startListening() {
             // Update charts
             // updateChart(distanceChart, distanceData, jsonData.distance);
 
-            let max_v = 10
-            distanceData.push(jsonData.distance);
-            distanceChart.data.labels.push(new Date().toLocaleTimeString());
+            let max_v = 100
+
+            const np = {data: jsonData.distance, time: new Date().toLocaleTimeString()}
+            data_points.push(np);
 
             if (distanceChart.data.labels.length > max_v) {
-                console.log(distanceData)
-                distanceData = distanceData.shift();
-                distanceChart.data.labels.shift();
+                data_points.shift();
             }
+
+            distanceChart.data.labels = data_points.map(d => d.time);
+            distanceChart.data.datasets[0].data = data_points.map(d => d.data);
 
             distanceChart.update();
 
