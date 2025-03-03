@@ -16,7 +16,7 @@ let distanceChart = new Chart(document.getElementById("distanceChart"), {
 });
 
 
-let connected = false;
+let connected = true;
 
 function toggleConnection() {
     const button = document.getElementById("connect-button");
