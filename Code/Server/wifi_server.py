@@ -34,6 +34,7 @@ def handle_client(client, client_info):
             if currently_moving and time.time() - start_time > sleep_time:
                 mov.stop()
                 currently_moving = False
+                print("stopping here")
 
             if data:
                 print(f"Client {client_info} disconnected.")
@@ -45,7 +46,7 @@ def handle_client(client, client_info):
                     if "s" in str_val:
                         mov.stop()
                         currently_moving = False
-                        
+
                     if str_val == "l":
                         sleep_time = mov.left()
                         currently_moving = True
@@ -61,8 +62,6 @@ def handle_client(client, client_info):
                     elif str_val == "s":
                         mov.stop()
                         currently_moving = False
-                    
-                    sleep_time = 99999
 
                     start_time = time.time()
 
