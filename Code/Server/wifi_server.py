@@ -15,6 +15,9 @@ from vidstream import startStreamingServer
 
 ult = Ultrasonic.Ultrasonic()
 mov = move_non_block.Move()
+picam2 = Picamera2()
+picam2.configure(picam2.create_video_configuration(main={"size": (640, 480)}))
+picam2.start()
 
 PORT = 65432
 
@@ -72,6 +75,8 @@ def handle_client(client, client_info):
                 "direction": 1 if currently_moving else 0,
                 "img": "aaa"
             }
+
+            print("sending")
 
             json_data = json.dumps(sensor_data)
             client.sendall(json_data.encode())
