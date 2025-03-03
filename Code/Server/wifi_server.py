@@ -71,6 +71,8 @@ def handle_client(client, client_info):
                         v = str_val.split()[1]
 
                         serv.setServoPwm('0', int(v))
+
+                        print("0", v)
                     elif str_val[0] == "1":
                         mov.stop()
                         currently_moving = False
@@ -78,6 +80,7 @@ def handle_client(client, client_info):
                         v = str_val.split()[1]
 
                         serv.setServoPwm('1', int(v))
+                        print("1", v)
 
                     start_time = time.time()
 
