@@ -4,13 +4,14 @@ let client = null;
 let serverIP = "";
 const serverPort = 65432;
 
-const distanceData = [];
+const data_points = [];
 
 const distanceChart = new Chart(document.getElementById("distanceChart"), {
     type: 'line',
+    options: '',
     data: {
         labels: [],
-        datasets: [{ label: 'Distance (cm)', data: distanceData, borderColor: 'blue', fill: false }]
+        datasets: [{ label: 'Distance (cm)', data: [], borderColor: 'blue', fill: false }]
     }
 });
 
@@ -31,18 +32,18 @@ function connectToServer() {
     client = new net.Socket();
 
     client.connect(serverPort, serverIP, () => {
-        console.log("✅ Connected to server:", serverIP);
+        console.log("Connected to server:", serverIP);
         document.getElementById("status").innerText = "Connected";
         startListening();
     });
 
     client.on("error", (err) => {
-        console.error("❌ Connection error:", err.message);
+        console.error("Connection error:", err.message);
         document.getElementById("status").innerText = "Connection Failed";
     });
 
     client.on("close", () => {
-        console.warn("❌ Connection closed.");
+        console.warn("Connection closed.");
         document.getElementById("status").innerText = "Disconnected";
     });
 }
@@ -51,7 +52,7 @@ function disconnectFromServer() {
     if (client) {
         client.destroy()
 
-        distanceData = []
+        data_points = []
     }
 }
 
@@ -67,17 +68,16 @@ function startListening() {
             // updateChart(distanceChart, distanceData, jsonData.distance);
 
             let max_v = 100
-            distanceData.push(jsonData.distance);
-            distanceChart.data.labels.push(new Date().toLocaleTimeString());
 
-            console.log(distanceData.length, "before")
+            const np = {data: jsonData.distance, time: new Date().toLocaleTimeString()}
+            data_points.push(np);
 
             if (distanceChart.data.labels.length > max_v) {
-                distanceData.shift();
-                distanceChart.data.labels.shift();
+                data_points.shift();
             }
 
-            console.log(distanceData.length, "after. added", jsonData.distance)
+            distanceChart.data.labels = data_points.map(d => d.time);
+            distanceChart.data.datasets[0].data = data_points.map(d => d.data);
 
             distanceChart.update();
 
