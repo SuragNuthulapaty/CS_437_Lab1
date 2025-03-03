@@ -6,7 +6,7 @@ const serverPort = 65432;
 
 const data_points = [];
 
-const distanceChart = new Chart(document.getElementById("distanceChart"), {
+let distanceChart = new Chart(document.getElementById("distanceChart"), {
     type: 'line',
     options: '',
     data: {
@@ -50,9 +50,24 @@ function connectToServer() {
 
 function disconnectFromServer() {
     if (client) {
+        console.log("ajkhdfxgchj")
         client.destroy()
 
+        distanceChart.destroy()
+        distanceChart = new Chart(document.getElementById("distanceChart"), {
+            type: 'line',
+            options: '',
+            data: {
+                labels: [],
+                datasets: [{ label: 'Distance (cm)', data: [], borderColor: 'blue', fill: false }]
+            }
+        });
+
         data_points = []
+        distanceChart.data.labels = [];
+        distanceChart.data.datasets.forEach(dataset => {
+            dataset.data = [];
+        });
     }
 }
 
