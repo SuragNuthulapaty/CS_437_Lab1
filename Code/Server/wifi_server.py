@@ -67,12 +67,12 @@ def handle_client(client, client_info):
 
             print("sending")
             
-            frame = capture_frame()
+            # frame = capture_frame()
 
             sensor_data = {
                 "distance": ult.get_distance(),
                 "direction": 1 if currently_moving else 0,
-                "img": frame
+                "img": "aaa"
             }
 
             json_data = json.dumps(sensor_data)

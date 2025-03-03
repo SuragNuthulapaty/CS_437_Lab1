@@ -83,8 +83,8 @@ function startListening() {
 
             console.log("Received from server:", jsonData);
 
-            const img = document.getElementById("cameraStream");
-            img.src = `data:image/jpeg;base64,${jsonData.img}`;
+            // const img = document.getElementById("cameraStream");
+            // img.src = `data:image/jpeg;base64,${jsonData.img}`;
 
         } catch (error) {
             console.error("Error parsing JSON:", error);
