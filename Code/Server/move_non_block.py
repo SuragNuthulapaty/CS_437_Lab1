@@ -5,7 +5,7 @@ from servo import *
 from PCA9685 import PCA9685
 import random
 
-SLEEP_TIME = 0.01
+SLEEP_TIME = 0.000001
 
 FORWARD_BACKWARD_SPEED = 1000
 TURN_SPEED = 1600

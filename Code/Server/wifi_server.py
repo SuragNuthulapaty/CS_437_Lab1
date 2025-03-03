@@ -31,10 +31,10 @@ def handle_client(client, client_info):
             except BlockingIOError:
                 data = None
 
-            # if currently_moving and time.time() - start_time > sleep_time:
-            #     mov.stop()
-            #     currently_moving = False
-            #     print("stopping here")
+            if currently_moving and time.time() - start_time > sleep_time:
+                mov.stop()
+                currently_moving = False
+                print("stopping here")
 
             if data:
                 print(f"Client {client_info} disconnected.")
