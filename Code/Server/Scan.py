@@ -148,9 +148,6 @@ class Scan:
         self.map = np.where(num_neighbors > 1, self.map, 0)
 
     def padded_map(self):
-        """
-        returns the map with added clearance
-        """
         return binary_dilation(self.map, structure=self.padding).astype(self.map.dtype)
 
     def save_map(self, filename="./map.png"):

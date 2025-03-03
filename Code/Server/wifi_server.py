@@ -11,6 +11,7 @@ import pickle
 import struct
 from io import BytesIO
 import base64
+from vidstream import startStreamingServer
 
 ult = Ultrasonic.Ultrasonic()
 mov = move_non_block.Move()
@@ -45,7 +46,7 @@ def handle_client(client, client_info):
 
             if data:
                 print(f"Client {client_info} disconnected.")
-        
+
                 str_val = data.decode().strip()
                 print(f"Received: {str_val}")
 
@@ -62,9 +63,11 @@ def handle_client(client, client_info):
                     elif str_val == "b":
                         sleep_time = mov.back()
                         currently_moving = True
-                    
+
                     start_time = time.time()
-            
+
+            print("sending")
+
             # frame = capture_frame()
 
             sensor_data = {
@@ -93,6 +96,10 @@ def start_server(host):
         server_socket.listen()
 
         print(f"Server listening on port {PORT}")
+
+        # start video server
+        video_thread = threading.Thread(target=startStreamingServer)
+        video_thread.start()
 
         try:
             while True:
