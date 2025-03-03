@@ -8,6 +8,7 @@ const distanceData = [];
 
 const distanceChart = new Chart(document.getElementById("distanceChart"), {
     type: 'line',
+    options: '',
     data: {
         labels: [],
         datasets: [{ label: 'Distance (cm)', data: distanceData, borderColor: 'blue', fill: false }]
@@ -31,18 +32,18 @@ function connectToServer() {
     client = new net.Socket();
 
     client.connect(serverPort, serverIP, () => {
-        console.log("✅ Connected to server:", serverIP);
+        console.log("Connected to server:", serverIP);
         document.getElementById("status").innerText = "Connected";
         startListening();
     });
 
     client.on("error", (err) => {
-        console.error("❌ Connection error:", err.message);
+        console.error("Connection error:", err.message);
         document.getElementById("status").innerText = "Connection Failed";
     });
 
     client.on("close", () => {
-        console.warn("❌ Connection closed.");
+        console.warn("Connection closed.");
         document.getElementById("status").innerText = "Disconnected";
     });
 }
@@ -66,18 +67,15 @@ function startListening() {
             // Update charts
             // updateChart(distanceChart, distanceData, jsonData.distance);
 
-            let max_v = 100
+            let max_v = 10
             distanceData.push(jsonData.distance);
             distanceChart.data.labels.push(new Date().toLocaleTimeString());
 
-            console.log(distanceData.length, "before")
-
             if (distanceChart.data.labels.length > max_v) {
-                distanceData.shift();
+                console.log(distanceData)
+                distanceData = distanceData.shift();
                 distanceChart.data.labels.shift();
             }
-
-            console.log(distanceData.length, "after. added", jsonData.distance)
 
             distanceChart.update();
 

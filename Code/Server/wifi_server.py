@@ -64,8 +64,6 @@ def handle_client(client, client_info):
                         currently_moving = True
                     
                     start_time = time.time()
-
-            print("sending")
             
             # frame = capture_frame()
 
@@ -74,6 +72,8 @@ def handle_client(client, client_info):
                 "direction": 1 if currently_moving else 0,
                 "img": "aaa"
             }
+
+            print("sending")
 
             json_data = json.dumps(sensor_data)
             client.sendall(json_data.encode())
