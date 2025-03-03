@@ -6,7 +6,7 @@ const serverPort = 65432;
 
 const data_points = [];
 
-const distanceChart = new Chart(document.getElementById("distanceChart"), {
+let distanceChart = new Chart(document.getElementById("distanceChart"), {
     type: 'line',
     options: '',
     data: {
@@ -14,6 +14,29 @@ const distanceChart = new Chart(document.getElementById("distanceChart"), {
         datasets: [{ label: 'Distance (cm)', data: [], borderColor: 'blue', fill: false }]
     }
 });
+
+const slider_0 = document.getElementById("slider_0");
+const angleDisplay_0 = document.getElementById("angleValue_0");
+
+noUiSlider.create(slider_0, {
+    start: 90,
+    range: {
+        min: 50,
+        max: 130
+    },
+    step: 1,
+    connect: [true, false]
+});
+
+slider_0.noUiSlider.on("update", function (values) {
+    const angle = Math.round(values[0]);
+    angleDisplay_0.textContent = angle;
+
+    let v = "0 " + angle
+
+    sendCommand(v);
+});
+
 
 
 function connectToServer() {
@@ -50,9 +73,24 @@ function connectToServer() {
 
 function disconnectFromServer() {
     if (client) {
+        console.log("ajkhdfxgchj")
         client.destroy()
 
+        distanceChart.destroy()
+        distanceChart = new Chart(document.getElementById("distanceChart"), {
+            type: 'line',
+            options: '',
+            data: {
+                labels: [],
+                datasets: [{ label: 'Distance (cm)', data: [], borderColor: 'blue', fill: false }]
+            }
+        });
+
         data_points = []
+        distanceChart.data.labels = [];
+        distanceChart.data.datasets.forEach(dataset => {
+            dataset.data = [];
+        });
     }
 }
 
@@ -114,21 +152,34 @@ document.addEventListener("keydown", function (event) {
 
     switch (event.key) {
         case "ArrowUp":
-            command = "f"; // Forward
+            command = "f";
             break;
         case "ArrowDown":
-            command = "b"; // Backward
+            command = "b";
             break;
         case "ArrowLeft":
-            command = "l"; // Left
+            command = "l";
             break;
         case "ArrowRight":
-            command = "r"; // Right
+            command = "r";
             break;
     }
 
     if (command) {
         sendCommand(command);
+    }
+});
+
+document.addEventListener("keyup", function (event) {
+    let stopCommand = "s";
+
+    switch (event.key) {
+        case "ArrowUp":
+        case "ArrowDown":
+        case "ArrowLeft":
+        case "ArrowRight":
+            sendCommand(stopCommand);
+            break;
     }
 });
 

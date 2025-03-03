@@ -12,20 +12,15 @@ import struct
 from io import BytesIO
 import base64
 from vidstream import startStreamingServer
+import servo
 
 ult = Ultrasonic.Ultrasonic()
 mov = move_non_block.Move()
-picam2 = Picamera2()
-picam2.configure(picam2.create_video_configuration(main={"size": (640, 480)}))
-picam2.start()
+serv = servo.Servo()
+
+serv.setServoPwm("1", 80)
 
 PORT = 65432
-
-def capture_frame():
-    image = picam2.capture_image()
-    byte_io = BytesIO()
-    image.save(byte_io, format="JPEG")
-    return base64.b64encode(byte_io.getvalue()).decode("utf-8")
 
 def handle_client(client, client_info):
     print(f"Connected to {client_info}")
@@ -43,6 +38,7 @@ def handle_client(client, client_info):
             if currently_moving and time.time() - start_time > sleep_time:
                 mov.stop()
                 currently_moving = False
+                print("stopping here")
 
             if data:
                 print(f"Client {client_info} disconnected.")
@@ -51,29 +47,53 @@ def handle_client(client, client_info):
                 print(f"Received: {str_val}")
 
                 if not currently_moving:
-                    if str_val == "l":
+                    if "s" in str_val:
+                        mov.stop()
+                        currently_moving = False
+
+                    if str_val[0] == "l":
                         sleep_time = mov.left()
                         currently_moving = True
-                    elif str_val == "r":
+                    elif str_val[0] == "r":
                         sleep_time = mov.right()
                         currently_moving = True
-                    elif str_val == "f":
+                    elif str_val[0] == "f":
                         sleep_time = mov.forward()
                         currently_moving = True
-                    elif str_val == "b":
+                    elif str_val[0] == "b":
                         sleep_time = mov.back()
                         currently_moving = True
+                    elif str_val[0] == "s":
+                        mov.stop()
+                        currently_moving = False
+                    elif str_val[0] == "0":
+                        mov.stop()
+                        currently_moving = False
+
+                        v = int(str_val.split()[1])
+
+                        while v > 150:
+                            v //= 10
+
+                        serv.setServoPwm('0', int(v))
+
+                        print("0", int(v))
+                    elif str_val[0] == "1":
+                        mov.stop()
+                        currently_moving = False
+
+                        v = str_val.split()[1]
+
+                        serv.setServoPwm('1', int(v))
+                        print("1", v)
 
                     start_time = time.time()
 
             print("sending")
 
-            # frame = capture_frame()
-
             sensor_data = {
                 "distance": ult.get_distance(),
-                "direction": 1 if currently_moving else 0,
-                "img": "aaa"
+                "direction": 1 if currently_moving else 0
             }
 
             print("sending")
@@ -111,6 +131,8 @@ def start_server(host):
             print("\nServer shutting down.")
         except Exception as e:
             print(f"Server error: {e}")
+        
+        mov.stop()
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
