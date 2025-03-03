@@ -47,19 +47,19 @@ def handle_client(client, client_info):
                         mov.stop()
                         currently_moving = False
 
-                    if str_val == "l":
+                    if str_val[0] == "l":
                         sleep_time = mov.left()
                         currently_moving = True
-                    elif str_val == "r":
+                    elif str_val[0] == "r":
                         sleep_time = mov.right()
                         currently_moving = True
-                    elif str_val == "f":
+                    elif str_val[0] == "f":
                         sleep_time = mov.forward()
                         currently_moving = True
-                    elif str_val == "b":
+                    elif str_val[0] == "b":
                         sleep_time = mov.back()
                         currently_moving = True
-                    elif str_val == "s":
+                    elif str_val[0] == "s":
                         mov.stop()
                         currently_moving = False
 
