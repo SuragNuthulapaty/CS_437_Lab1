@@ -82,12 +82,12 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True
     daemon_threads = True
 
-def startStreamingServer():
-    picam2 = Picamera2()
-    picam2.configure(picam2.create_video_configuration(main={"size": (640, 480)}))
-    output = StreamingOutput()
-    picam2.start_recording(JpegEncoder(), FileOutput(output))
+picam2 = Picamera2()
+picam2.configure(picam2.create_video_configuration(main={"size": (640, 480)}))
+output = StreamingOutput()
 
+def startStreamingServer():
+    picam2.start_recording(JpegEncoder(), FileOutput(output))
     try:
         address = ('', 8000)
         server = StreamingServer(address, StreamingHandler)
