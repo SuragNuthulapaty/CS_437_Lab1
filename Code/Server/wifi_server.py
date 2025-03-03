@@ -68,11 +68,14 @@ def handle_client(client, client_info):
                         mov.stop()
                         currently_moving = False
 
-                        v = str_val.split()[1]
+                        v = int(str_val.split()[1])
+
+                        while v > 150:
+                            v //= 10
 
                         serv.setServoPwm('0', int(v))
 
-                        print("0", v)
+                        print("0", int(v))
                     elif str_val[0] == "1":
                         mov.stop()
                         currently_moving = False
