@@ -15,28 +15,6 @@ let distanceChart = new Chart(document.getElementById("distanceChart"), {
     }
 });
 
-const slider_1 = document.getElementById("slider_1");
-const angleDisplay_1 = document.getElementById("angleValue_1");
-
-noUiSlider.create(slider_1, {
-    start: 90,
-    range: {
-        min: 50,
-        max: 130
-    },
-    step: 1,
-    connect: [true, false]
-});
-
-slider_1.noUiSlider.on("update", function (values) {
-    const angle = Math.round(values[0]);
-    angleDisplay_1.textContent = angle;
-
-    let v = "1 " + angle
-
-    sendCommand(v);
-});
-
 const slider_0 = document.getElementById("slider_0");
 const angleDisplay_0 = document.getElementById("angleValue_0");
 

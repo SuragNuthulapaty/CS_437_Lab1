@@ -18,6 +18,8 @@ ult = Ultrasonic.Ultrasonic()
 mov = move_non_block.Move()
 serv = servo.Servo()
 
+serv.setServoPwm("1", 80)
+
 PORT = 65432
 
 def handle_client(client, client_info):
