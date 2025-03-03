@@ -6,7 +6,8 @@
     <title>IoT Robot Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <link href="./styles.css" rel="stylesheet"></link>
+    <script src="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css">
 </head>
 <body>
 
@@ -25,6 +26,10 @@
             <canvas id="distanceChart"></canvas>
         </div>
 
+        <p>Horizontal Angle: <span id="angleValue_0">90</span>°</p>
+        <div id="slider_0"></div>
+
+
         <div class="flex-1">
             <button onclick="sendCommand('f')">⬆️</button>
             <button onclick="sendCommand('b')">⬇️</button>
@@ -35,22 +40,5 @@
 </main>
 
 <script src="index.js"></script>
-<script>
-    let connected = false;
-
-    function toggleConnection() {
-        const button = document.getElementById("connect-button");
-        document.querySelector("main").classList.toggle("hidden");
-
-        if (connected) {
-            button.innerText = "Connect";
-            disconnectFromServer();
-        } else {
-            connected = true;
-            button.innerText = "Disconnect";
-            connectToServer();
-        }
-    }
-</script>
-</body>
 </html>
+</body>

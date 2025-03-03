@@ -15,6 +15,23 @@ let distanceChart = new Chart(document.getElementById("distanceChart"), {
     }
 });
 
+
+let connected = false;
+
+function toggleConnection() {
+    const button = document.getElementById("connect-button");
+    document.querySelector("main").classList.toggle("hidden");
+
+    if (connected) {
+        button.innerText = "Connect";
+        disconnectFromServer();
+    } else {
+        connected = true;
+        button.innerText = "Disconnect";
+        connectToServer();
+    }
+}
+
 const slider_0 = document.getElementById("slider_0");
 const angleDisplay_0 = document.getElementById("angleValue_0");
 
