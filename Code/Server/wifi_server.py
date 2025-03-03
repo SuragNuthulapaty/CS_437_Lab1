@@ -31,9 +31,9 @@ def handle_client(client, client_info):
             except BlockingIOError:
                 data = None
 
-            if currently_moving and time.time() - start_time > sleep_time:
-                mov.stop()
-                currently_moving = False
+            # if currently_moving and time.time() - start_time > sleep_time:
+            #     mov.stop()
+            #     currently_moving = False
 
             if data:
                 print(f"Client {client_info} disconnected.")
@@ -54,6 +54,11 @@ def handle_client(client, client_info):
                     elif str_val == "b":
                         sleep_time = mov.back()
                         currently_moving = True
+                    elif str_val == "s":
+                        mov.stop()
+                        currently_moving = False
+                    
+                    sleep_time = 99999
 
                     start_time = time.time()
 
@@ -99,6 +104,8 @@ def start_server(host):
             print("\nServer shutting down.")
         except Exception as e:
             print(f"Server error: {e}")
+        
+        mov.stop()
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

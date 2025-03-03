@@ -114,21 +114,34 @@ document.addEventListener("keydown", function (event) {
 
     switch (event.key) {
         case "ArrowUp":
-            command = "f"; // Forward
+            command = "f";
             break;
         case "ArrowDown":
-            command = "b"; // Backward
+            command = "b";
             break;
         case "ArrowLeft":
-            command = "l"; // Left
+            command = "l";
             break;
         case "ArrowRight":
-            command = "r"; // Right
+            command = "r";
             break;
     }
 
     if (command) {
         sendCommand(command);
+    }
+});
+
+document.addEventListener("keyup", function (event) {
+    let stopCommand = "s";
+
+    switch (event.key) {
+        case "ArrowUp":
+        case "ArrowDown":
+        case "ArrowLeft":
+        case "ArrowRight":
+            sendCommand(stopCommand);
+            break;
     }
 });
 
