@@ -89,14 +89,10 @@ def handle_client(client, client_info):
 
                     start_time = time.time()
 
-            print("sending")
-
             sensor_data = {
                 "distance": ult.get_distance(),
                 "direction": 1 if currently_moving else 0
             }
-
-            print("sending")
 
             json_data = json.dumps(sensor_data)
             client.sendall(json_data.encode())
