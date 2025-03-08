@@ -75,6 +75,20 @@
             sendCommand(command);
         }
     });
+
+    document.addEventListener("keyup", function (event) {
+        let stopCommand = "s";
+
+        switch (event.key) {
+            case "ArrowUp":
+            case "ArrowDown":
+            case "ArrowLeft":
+            case "ArrowRight":
+                sendCommand(stopCommand);
+                break;
+        }
+    });
+
 </script>
 <script src="index.js"></script>
 </html>

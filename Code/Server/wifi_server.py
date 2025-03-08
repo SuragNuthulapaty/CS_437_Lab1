@@ -39,38 +39,38 @@ def handle_client(client, client_info):
                 str_val = data.decode().strip()
                 print(f"Received: {str_val}")
 
-                if not currently_moving:
-                    if "s" in str_val:
-                        mov.stop()
-                        currently_moving = False
+                if "s" in str_val:
+                    mov.stop()
+                    currently_moving = False
 
-                    if str_val[0] == "l":
-                        sleep_time = mov.left()
-                        currently_moving = True
-                    elif str_val[0] == "r":
-                        sleep_time = mov.right()
-                        currently_moving = True
-                    elif str_val[0] == "f":
-                        sleep_time = mov.forward()
-                        currently_moving = True
-                    elif str_val[0] == "b":
-                        sleep_time = mov.back()
-                        currently_moving = True
-                    elif str_val[0] == "s":
-                        mov.stop()
-                        currently_moving = False
-                    elif str_val[0] == "0":
-                        mov.stop()
-                        currently_moving = False
+                if str_val[0] == "l":
+                    sleep_time = mov.left()
+                    currently_moving = True
+                elif str_val[0] == "r":
+                    sleep_time = mov.right()
+                    currently_moving = True
+                elif str_val[0] == "f":
+                    sleep_time = mov.forward()
+                    currently_moving = True
+                elif str_val[0] == "b":
+                    sleep_time = mov.back()
+                    currently_moving = True
+                elif str_val[0] == "s":
+                    mov.stop()
+                    currently_moving = False
+                elif str_val[0] == "0":
+                    mov.stop()
+                    currently_moving = False
 
-                        v = int(str_val.split()[1])
+                    v = int(str_val.split()[1])
 
-                        while v > 150:
-                            v //= 10
+                    while v > 150:
+                        v //= 10
 
-                        serv.setServoPwm('0', int(v))
+                    serv.setServoPwm('0', int(v))
 
-                        print("0", int(v))
+                    print("0", int(v))
+                        
                     # elif str_val[0] == "1":
                     #     mov.stop()
                     #     currently_moving = False
