@@ -1,10 +1,10 @@
 const net = require('net');
 
 let client = null;
-let serverIP = "";
+let serverIP = "10.195.7.214";
 const serverPort = 65432;
 
-const data_points = [];
+let data_points = [];
 
 let distanceChart = new Chart(document.getElementById("distanceChart"), {
     type: 'line',
@@ -54,14 +54,15 @@ slider_0.noUiSlider.on("update", function (values) {
     sendCommand(v);
 });
 
-
-
 function connectToServer() {
     if (client) {
         client.destroy();
     }
 
-    serverIP = document.getElementById("ipAddress").value;
+    if (document.getElementById("ipAddress")) {
+        serverIP = document.getElementById("ipAddress").value;
+        console.log(`Now using ${serverIP}`);
+    }
 
 
     if (!serverIP) {
@@ -73,7 +74,7 @@ function connectToServer() {
 
     client.connect(serverPort, serverIP, () => {
         console.log("Connected to server:", serverIP);
-        document.getElementById("status").innerText = "Connected";
+        // document.getElementById("status").innerText = "Connected";
         startListening();
     });
 

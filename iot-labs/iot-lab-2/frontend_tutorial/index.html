@@ -8,36 +8,52 @@
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/dist/nouislider.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body onload="connectToServer()">
 
-<!-- to manual connect -->
+<!-- to manual connect: remove onload from body -->
 <!--<div class="flex flex-row m-4 gap-2">
     <input class="border border-black rounded-lg w-27 px-2" type="text" id="ipAddress" placeholder="Server IP"
            value="10.195.7.214">
     <button class="bg-gray-300 rounded-lg px-2 py-1" id="connect-button" onclick="toggleConnection()">Connect</button>
 </div>-->
 
-<div onload="connectToServer()"></div>
-
 <main class="flex flex-row w-full h-[100vh] items-center justify-center bg-[url(http://10.195.7.214:8000/stream.mjpg)] bg-cover overflow-hidden">
-    <div class="absolute bottom-0 left-0 h-1/4 w-1/4 bg-white/80">
-        <canvas class="flex-1" id="distanceChart"></canvas>
+    <div class="absolute top-5 w-full flex flex-column justify-center">
+        <input type="range" min="0" max="180" step="1" value="90" id="slider" class="absolute w-80 bg-gray-200 rounded-full h-3 appearance-none">
     </div>
 
-    <p>Horizontal Angle: <span id="angleValue_0">90</span>°</p>
-    <div id="slider_0"></div>
-
-    <div class="flex-1 flex-col flex align-center text-2xl">
-        <button id="button-f" onclick="sendCommand('f')">⬆️</button>
-        <div class="flex flex-row align-center justify-center gap-[1.5em]">
-            <button id="button-l" onclick="sendCommand('l')">⬅️</button>
-            <button id="button-r" onclick="sendCommand('r')">➡️</button>
+    <div class="absolute bottom-0 left-0 h-full w-1/4 flex flex-col justify-end">
+        <div id="direction" class="pt-4 px-4 m-0 bg-white/80 consolas text-[#00a6ed]">Now moving forward</div>
+        <div id="direction" class="px-4 py-2 m-0 bg-white/80 consolas text-[#00a6ed]">Viewing angle <span id="angleValue_0">90</span>%</div>
+        <div class="h-1/4 bg-black/80">
+            <canvas class="flex-1" id="distanceChart"></canvas>
         </div>
-        <button id="button-b" onclick="sendCommand('b')">⬇️</button>
+    </div>
+
+    <div class="flex-1 flex-col flex justify-center items-center text-3xl absolute bottom-4 right-4 gap-[.25em]">
+        <button onclick="sendCommand('f')">⬆️</button>
+        <div class="flex flex-row align-center justify-center gap-[1.35em]">
+            <button onclick="sendCommand('l')">⬅️</button>
+            <button onclick="sendCommand('r')">➡️</button>
+        </div>
+        <button onclick="sendCommand('b')">⬇️</button>
     </div>
 </main>
 
+<script>
+    const slider = document.getElementById("slider");
+    const angleView = document.getElementById("angleValue_0");
+    document.addEventListener("mousemove", function (event) {
+        const angle = (event.clientX / window.innerWidth) * 180;
+        console.log(angle);
+        // sendCommand(`0 ${angle}`);
+        slider.value = angle;
+        angleView.innerHTML = Math.round(angle);
+    })
+
+</script>
 <script src="index.js"></script>
 </html>
 </body>
