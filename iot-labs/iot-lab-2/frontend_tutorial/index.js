@@ -137,7 +137,7 @@ function startListening() {
 
             distanceChart.update();
 
-            console.log("Received from server:", jsonData);
+            // console.log("Received from server:", jsonData);
 
             // const img = document.getElementById("cameraStream");
             // img.src = `data:image/jpeg;base64,${jsonData.img}`;
@@ -164,29 +164,6 @@ function updateChart(chart, dataset, newValue) {
 
     chart.update();
 }
-
-document.addEventListener("keydown", function (event) {
-    let command = null;
-
-    switch (event.key) {
-        case "ArrowUp":
-            command = "f";
-            break;
-        case "ArrowDown":
-            command = "b";
-            break;
-        case "ArrowLeft":
-            command = "l";
-            break;
-        case "ArrowRight":
-            command = "r";
-            break;
-    }
-
-    if (command) {
-        sendCommand(command);
-    }
-});
 
 document.addEventListener("keyup", function (event) {
     let stopCommand = "s";

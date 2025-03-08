@@ -46,13 +46,36 @@
     const slider = document.getElementById("slider");
     const angleView = document.getElementById("angleValue_0");
     document.addEventListener("mousemove", function (event) {
-        const angle = (event.clientX / window.innerWidth) * 180;
-        console.log(angle);
-        // sendCommand(`0 ${angle}`);
+        const angle = Math.round(event.clientX / window.innerWidth * 180);
+        // console.log(angle);
+        sendCommand(`0 ${angle}`);
         slider.value = angle;
-        angleView.innerHTML = Math.round(angle);
+        angleView.innerHTML = angle;
     })
 
+
+    document.addEventListener("keydown", function (event) {
+        let command = null;
+
+        switch (event.key) {
+            case "ArrowUp":
+                command = "f";
+                break;
+            case "ArrowDown":
+                command = "b";
+                break;
+            case "ArrowLeft":
+                command = "l";
+                break;
+            case "ArrowRight":
+                command = "r";
+                break;
+        }
+
+        if (command) {
+            sendCommand(command);
+        }
+    });
 </script>
 <script src="index.js"></script>
 </html>
