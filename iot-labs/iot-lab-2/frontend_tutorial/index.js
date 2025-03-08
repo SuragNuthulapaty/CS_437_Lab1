@@ -118,7 +118,12 @@ function startListening() {
             const jsonData = JSON.parse(data.toString());
 
             // Update displayed direction
-            document.getElementById("direction").innerText = jsonData.direction;
+            console.log(jsonData.direction);
+            if (jsonData.direction == "0") {
+                document.getElementById("direction").innerText = "Bot is not moving"
+            } else {
+                document.getElementById("direction").innerText = "Bot is moving"
+            }
 
             // Update charts
             // updateChart(distanceChart, distanceData, jsonData.distance);
