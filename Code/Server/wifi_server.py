@@ -24,8 +24,6 @@ PORT = 65432
 
 def handle_client(client, client_info):
     print(f"Connected to {client_info}")
-    start_time = 0
-
     currently_moving = False
 
     try:
@@ -34,11 +32,6 @@ def handle_client(client, client_info):
                 data = client.recv(1024)
             except BlockingIOError:
                 data = None
-
-            if currently_moving and time.time() - start_time > sleep_time:
-                mov.stop()
-                currently_moving = False
-                print("stopping here")
 
             if data:
                 print(f"Client {client_info} disconnected.")
@@ -86,8 +79,6 @@ def handle_client(client, client_info):
 
                     #     serv.setServoPwm('1', int(v))
                     #     print("1", v)
-
-                    start_time = time.time()
 
             sensor_data = {
                 "distance": ult.get_distance(),
